@@ -6,23 +6,21 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
 
-const useStyles = makeStyles({
-  field: {
-    marginBottom: '20px',
-  },
-});
+import { useAuthFormStyles } from '../utils/styles/formStyles';
 
 export default function LoginForm({ open, handleClose }) {
-  const styles = useStyles();
+  const styles = useAuthFormStyles();
   const [logInFormData, setLogInFormData] = useState({
     email: '',
     password: '',
   });
-  const [token, setToken] = useState('');
   const [errors, setErrors] = useState({});
+  const [openBackdrop, setOpenBackdrop] = useState(false);
+
   const handleChange = (e) => {
     console.log('change is happenes');
     setLogInFormData({
@@ -32,24 +30,32 @@ export default function LoginForm({ open, handleClose }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setOpenBackdrop(true);
     try {
       const res = await axios.post(
         'http://localhost:5001/wincp-9d49a/us-central1/api/login',
         logInFormData
       );
-      console.log(res.data.token);
-      setToken(res.data.token);
+      const token = res.data.token;
+      // const userDetailsResponse = await axios.get(
+      //   'http://localhost:5001/wincp-9d49a/us-central1/api/user',
+      //   {
+      //     headers: {
+      //       Authorization: 'Bearer ' + token,
+      //     },
+      //   }
+      // );
+      // const userDetails = userDetailsResponse.data;
+      // console.log(userDetails);
+      setOpenBackdrop(false);
+      logInFormData.email = '';
+      logInFormData.password = '';
+      handleClose();
     } catch (err) {
       setErrors(err.response.data.errors);
+      setOpenBackdrop(false);
       console.log(err.response.data.errors);
     }
-
-    // axios.get('https://example.com/getSomething', {
-    //   headers: {
-    //     Authorization: 'Bearer ' + token, //the token is a variable which holds the token
-    //   },
-    // });
-    // handleClose();
   };
 
   return (
@@ -61,7 +67,7 @@ export default function LoginForm({ open, handleClose }) {
         maxWidth="sm"
       >
         <DialogTitle>
-          <Typography variant="h4" gutterBottom color="secondary">
+          <Typography gutterBottom color="secondary">
             LogIn
           </Typography>
         </DialogTitle>
@@ -99,6 +105,9 @@ export default function LoginForm({ open, handleClose }) {
             Submit
           </Button>
         </DialogActions>
+        <Backdrop className={styles.backdrop} open={openBackdrop}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Dialog>
     </div>
   );

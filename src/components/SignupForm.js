@@ -6,21 +6,23 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import axios from 'axios';
 
-const useStyles = makeStyles({
-  field: {
-    marginBottom: '20px',
-  },
-});
+import { useAuthFormStyles } from '../utils/styles/formStyles';
 
 export default function SignUpForm({ open, handleClose }) {
+  const styles = useAuthFormStyles();
   const [signUpFormData, setSignUpFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
+  const [errors, setErrors] = useState({});
+  const [openBackdrop, setOpenBackdrop] = useState(false);
+
   const handleChange = (e) => {
     console.log('change is happenes');
     setSignUpFormData({
@@ -28,7 +30,39 @@ export default function SignUpForm({ open, handleClose }) {
       [e.target.name]: e.target.value,
     });
   };
-  const styles = useStyles();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setOpenBackdrop(true);
+    try {
+      const res = await axios.post(
+        'http://localhost:5001/wincp-9d49a/us-central1/api/signup',
+        signUpFormData
+      );
+      console.log('res is', res);
+      const token = res.data.token;
+      console.log(token);
+      // const userDetailsResponse = await axios.get(
+      //   'http://localhost:5001/wincp-9d49a/us-central1/api/user',
+      //   {
+      //     headers: {
+      //       Authorization: 'Bearer ' + token,
+      //     },
+      //   }
+      // );
+      // const userDetails = userDetailsResponse.data;
+      // console.log(userDetails);
+      setOpenBackdrop(false);
+      signUpFormData.username = '';
+      signUpFormData.email = '';
+      signUpFormData.password = '';
+      signUpFormData.confirmPassword = '';
+      handleClose();
+    } catch (err) {
+      console.log(err.response.data.errors);
+      setErrors(err.response.data.errors);
+      setOpenBackdrop(false);
+    }
+  };
 
   return (
     <div>
@@ -39,12 +73,14 @@ export default function SignUpForm({ open, handleClose }) {
         maxWidth="sm"
       >
         <DialogTitle>
-          <Typography variant="h4" gutterBottom color="secondary">
+          <Typography gutterBottom color="secondary">
             SignUp
           </Typography>
         </DialogTitle>
         <DialogContent>
           <TextField
+            error={errors.username ? true : false}
+            helperText={errors.username ? errors.username : null}
             autoFocus
             name="username"
             margin="dense"
@@ -56,6 +92,8 @@ export default function SignUpForm({ open, handleClose }) {
             className={styles.field}
           />
           <TextField
+            error={errors.email ? true : false}
+            helperText={errors.email ? errors.email : null}
             name="email"
             margin="dense"
             label="Email Address"
@@ -66,6 +104,8 @@ export default function SignUpForm({ open, handleClose }) {
             className={styles.field}
           />
           <TextField
+            error={errors.password ? true : false}
+            helperText={errors.password ? errors.password : null}
             name="password"
             margin="dense"
             label="Password"
@@ -76,6 +116,12 @@ export default function SignUpForm({ open, handleClose }) {
             className={styles.field}
           />
           <TextField
+            error={
+              errors.confirmPassword || errors.confirmPassword === ''
+                ? true
+                : false
+            }
+            helperText={errors.confirmPassword ? errors.confirmPassword : null}
             name="confirmPassword"
             margin="dense"
             label="Confirm Password"
@@ -87,10 +133,13 @@ export default function SignUpForm({ open, handleClose }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleSubmit} color="secondary">
             Submit
           </Button>
         </DialogActions>
+        <Backdrop className={styles.backdrop} open={openBackdrop}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Dialog>
     </div>
   );
