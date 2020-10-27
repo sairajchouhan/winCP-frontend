@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   field: {
@@ -15,10 +16,13 @@ const useStyles = makeStyles({
 });
 
 export default function LoginForm({ open, handleClose }) {
+  const styles = useStyles();
   const [logInFormData, setLogInFormData] = useState({
     email: '',
     password: '',
   });
+  const [token, setToken] = useState('');
+  const [errors, setErrors] = useState({});
   const handleChange = (e) => {
     console.log('change is happenes');
     setLogInFormData({
@@ -26,7 +30,27 @@ export default function LoginForm({ open, handleClose }) {
       [e.target.name]: e.target.value,
     });
   };
-  const styles = useStyles();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        'http://localhost:5001/wincp-9d49a/us-central1/api/login',
+        logInFormData
+      );
+      console.log(res.data.token);
+      setToken(res.data.token);
+    } catch (err) {
+      setErrors(err.response.data.errors);
+      console.log(err.response.data.errors);
+    }
+
+    // axios.get('https://example.com/getSomething', {
+    //   headers: {
+    //     Authorization: 'Bearer ' + token, //the token is a variable which holds the token
+    //   },
+    // });
+    // handleClose();
+  };
 
   return (
     <div>
@@ -43,6 +67,10 @@ export default function LoginForm({ open, handleClose }) {
         </DialogTitle>
         <DialogContent>
           <TextField
+            error={errors.email ? true : false}
+            helperText={errors.email ? errors.email : null}
+            id="my-login-email-adress"
+            autoFocus
             name="email"
             margin="dense"
             label="Email Address"
@@ -53,6 +81,9 @@ export default function LoginForm({ open, handleClose }) {
             className={styles.field}
           />
           <TextField
+            error={errors.password ? true : false}
+            helperText={errors.password ? errors.password : null}
+            id="my-login-password"
             name="password"
             margin="dense"
             label="Password"
@@ -64,7 +95,7 @@ export default function LoginForm({ open, handleClose }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="secondary">
+          <Button onClick={handleSubmit} color="secondary">
             Submit
           </Button>
         </DialogActions>
