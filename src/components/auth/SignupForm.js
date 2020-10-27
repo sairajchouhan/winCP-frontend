@@ -10,21 +10,23 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
 
-import { useAuthFormStyles } from '../utils/styles/formStyles';
+import { useAuthFormStyles } from '../../utils/styles/formStyles';
 
-export default function LoginForm({ open, handleClose }) {
+export default function SignUpForm({ open, handleClose }) {
   const styles = useAuthFormStyles();
-  const [logInFormData, setLogInFormData] = useState({
+  const [signUpFormData, setSignUpFormData] = useState({
+    username: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
   const [errors, setErrors] = useState({});
   const [openBackdrop, setOpenBackdrop] = useState(false);
 
   const handleChange = (e) => {
     console.log('change is happenes');
-    setLogInFormData({
-      ...logInFormData,
+    setSignUpFormData({
+      ...signUpFormData,
       [e.target.name]: e.target.value,
     });
   };
@@ -33,10 +35,11 @@ export default function LoginForm({ open, handleClose }) {
     setOpenBackdrop(true);
     try {
       const res = await axios.post(
-        'http://localhost:5001/wincp-9d49a/us-central1/api/login',
-        logInFormData
+        'http://localhost:5001/wincp-9d49a/us-central1/api/signup',
+        signUpFormData
       );
       const token = res.data.token;
+      console.log(token);
       // const userDetailsResponse = await axios.get(
       //   'http://localhost:5001/wincp-9d49a/us-central1/api/user',
       //   {
@@ -48,13 +51,15 @@ export default function LoginForm({ open, handleClose }) {
       // const userDetails = userDetailsResponse.data;
       // console.log(userDetails);
       setOpenBackdrop(false);
-      logInFormData.email = '';
-      logInFormData.password = '';
+      signUpFormData.username = '';
+      signUpFormData.email = '';
+      signUpFormData.password = '';
+      signUpFormData.confirmPassword = '';
       handleClose();
     } catch (err) {
+      console.log(err.response.data.errors);
       setErrors(err.response.data.errors);
       setOpenBackdrop(false);
-      console.log(err.response.data.errors);
     }
   };
 
@@ -68,20 +73,31 @@ export default function LoginForm({ open, handleClose }) {
       >
         <DialogTitle>
           <Typography gutterBottom color="secondary">
-            LogIn
+            SignUp
           </Typography>
         </DialogTitle>
         <DialogContent>
           <TextField
+            error={errors.username ? true : false}
+            helperText={errors.username ? errors.username : null}
+            autoFocus
+            name="username"
+            margin="dense"
+            label="Username"
+            type="text"
+            value={signUpFormData.username}
+            onChange={handleChange}
+            fullWidth
+            className={styles.field}
+          />
+          <TextField
             error={errors.email ? true : false}
             helperText={errors.email ? errors.email : null}
-            id="my-login-email-adress"
-            autoFocus
             name="email"
             margin="dense"
             label="Email Address"
             type="email"
-            value={setLogInFormData.email}
+            value={signUpFormData.email}
             onChange={handleChange}
             fullWidth
             className={styles.field}
@@ -89,12 +105,27 @@ export default function LoginForm({ open, handleClose }) {
           <TextField
             error={errors.password ? true : false}
             helperText={errors.password ? errors.password : null}
-            id="my-login-password"
             name="password"
             margin="dense"
             label="Password"
             type="password"
-            value={setLogInFormData.password}
+            value={signUpFormData.password}
+            onChange={handleChange}
+            fullWidth
+            className={styles.field}
+          />
+          <TextField
+            error={
+              errors.confirmPassword || errors.confirmPassword === ''
+                ? true
+                : false
+            }
+            helperText={errors.confirmPassword ? errors.confirmPassword : null}
+            name="confirmPassword"
+            margin="dense"
+            label="Confirm Password"
+            type="password"
+            value={signUpFormData.confirmPassword}
             onChange={handleChange}
             fullWidth
             className={styles.field}

@@ -6,8 +6,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-import SignUpForm from './SignupForm';
-import LoginForm from './LoginForm';
+import SignUpForm from '../auth/SignupForm';
+import LoginForm from '../auth/LoginForm';
 
 const useStyles = makeStyles((theme) => ({
   root: {
