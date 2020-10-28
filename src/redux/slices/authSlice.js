@@ -5,8 +5,9 @@ import setAuthToken from '../../utils/setAuthToken';
 
 const initialState = {
   token: localStorage.getItem('token'),
-  isAuthenticated: null,
+  isAuthenticated: false,
   user: null,
+  errors: {},
 };
 
 export const authSlice = createSlice({
@@ -21,6 +22,9 @@ export const authSlice = createSlice({
       state.token = null;
       state.isAuthenticated = false;
       state.user = null;
+    },
+    LOGIN_FAIL: (state, action) => {
+      state.errors = action.payload;
     },
   },
 });
@@ -40,6 +44,15 @@ export const loadUser = () => async (dispatch) => {
   } catch (err) {
     dispatch(AUTH_ERROR());
   }
+};
+export const loginUser = (email, password) => async (dispatch) => {
+  try {
+    const body = { email, password };
+    const res = await axios.post(
+      'http://localhost:5001/wincp-9d49a/us-central1/api/login',
+      body
+    );
+  } catch (err) {}
 };
 
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
