@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { loginUser, selectLoginErrors } from '../redux/slices/authSlice';
 
 function Copyright() {
   return (
@@ -46,12 +49,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function Login() {
+  const errors = useSelector(selectLoginErrors);
+  const dispatch = useDispatch();
   const classes = useStyles();
+  const [logInFormData, setLogInFormData] = useState({
+    email: '',
+    password: '',
+  });
+
   const handleLoginSubmit = (e) => {
     e.preventDefault();
+    dispatch(loginUser(logInFormData));
   };
 
+  const handleChange = (e) => {
+    console.log('change is happenes');
+    setLogInFormData({
+      ...logInFormData,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -64,6 +82,10 @@ export default function SignIn() {
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleLoginSubmit}>
           <TextField
+            value={logInFormData.email}
+            onChange={handleChange}
+            error={errors.email ? true : false}
+            helperText={errors.email ? errors.email : null}
             variant="outlined"
             margin="normal"
             required
@@ -75,6 +97,10 @@ export default function SignIn() {
             autoFocus
           />
           <TextField
+            value={logInFormData.password}
+            onChange={handleChange}
+            error={errors.password ? true : false}
+            helperText={errors.password ? errors.password : null}
             variant="outlined"
             margin="normal"
             required
@@ -118,3 +144,9 @@ export default function SignIn() {
     </Container>
   );
 }
+
+// const token = res.data.token
+
+// setErrors(err.response.data.errors);
+// setOpenBackdrop(false);
+// console.log(err.response.data.errors);
