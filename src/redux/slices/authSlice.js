@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   token: localStorage.getItem('token'),
-  isAuthenticated: false,
+  isAuthenticated: null,
   user: null,
   loading: false,
   loginErrors: {},
@@ -75,6 +75,7 @@ export const selectLoginErrors = (state) => state.auth.loginErrors;
 export const selectSignupErrors = (state) => state.auth.signupErrors;
 export const selectLoading = (state) => state.auth.loading;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const selectUser = (state) => state.auth.user;
 
 export default authSlice.reducer;
 

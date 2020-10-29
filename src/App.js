@@ -13,6 +13,7 @@ import setAuthToken from './utils/setAuthToken';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import { loadUser } from './redux/actions/authActions';
+import ProfilePage from './pages/ProfilePage';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -33,6 +34,7 @@ function App() {
           <Route exact path="/counter" component={Counter} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/signup" component={SignupPage} />
+          <PrivateRoute exact path="/profile" component={ProfilePage} />
           <PrivateRoute exact path="/home" component={HomePage} />
         </Switch>
       </div>
