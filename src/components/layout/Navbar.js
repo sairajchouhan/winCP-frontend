@@ -48,7 +48,18 @@ const Navbar = () => {
           >
             winCP
           </Typography>
-          {isAuthenticated === false ? (
+          {isAuthenticated === null ? (
+            <></>
+          ) : isAuthenticated === true ? (
+            <>
+              <Button color="inherit" component={Link} to="/profile">
+                My Profile
+              </Button>
+              <Button onClick={handleLogout} color="inherit">
+                Logout
+              </Button>
+            </>
+          ) : (
             <>
               <Button component={Link} to="/login" color="inherit">
                 Login
@@ -56,15 +67,6 @@ const Navbar = () => {
 
               <Button component={Link} to="/signup" color="inherit">
                 SignUp
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button color="inherit" component={Link} to="/profile">
-                My Profile
-              </Button>
-              <Button onClick={handleLogout} color="inherit">
-                Logout
               </Button>
             </>
           )}
