@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -16,10 +16,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { loginUser } from '../redux/actions/authActions';
 import {
-  loginUser,
   selectLoginErrors,
   selectLoading,
+  selectIsAuthenticated,
 } from '../redux/slices/authSlice';
 
 function Copyright() {
@@ -57,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const errors = useSelector(selectLoginErrors);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
   const classes = useStyles();
@@ -65,9 +67,13 @@ export default function Login() {
     password: '',
   });
 
-  const handleLoginSubmit = (e) => {
+  if (isAuthenticated) {
+    return <Redirect to="/home" />;
+  }
+
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    dispatch(loginUser(logInFormData));
+    await dispatch(loginUser(logInFormData));
   };
 
   const handleChange = (e) => {
@@ -77,6 +83,7 @@ export default function Login() {
       [e.target.name]: e.target.value,
     });
   };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -156,9 +163,3 @@ export default function Login() {
     </Container>
   );
 }
-
-// const token = res.data.token
-
-// setErrors(err.response.data.errors);
-// setOpenBackdrop(false);
-// console.log(err.response.data.errors);

@@ -13,14 +13,16 @@ import Typography from '@material-ui/core/Typography';
 import Backdrop from '@material-ui/core/Backdrop';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import {
-  signupUser,
   selectSignupErrors,
   selectLoading,
+  selectIsAuthenticated,
 } from '../redux/slices/authSlice';
+import { signupUser } from '../redux/actions/authActions';
 
 function Copyright() {
   return (
@@ -60,7 +62,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+  const history = useHistory();
   const errors = useSelector(selectSignupErrors);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -82,8 +86,14 @@ export default function SignUp() {
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
     console.log(loading);
-    dispatch(signupUser(signupFormData));
+    await dispatch(signupUser(signupFormData));
+    if (isAuthenticated) {
+      history.push('/home');
+    }
   };
+  if (isAuthenticated) {
+    return <Redirect to="/home" />;
+  }
 
   return (
     <Container component="main" maxWidth="xs">
