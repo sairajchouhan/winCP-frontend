@@ -8,13 +8,19 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import Backdrop from '@material-ui/core/Backdrop';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { signupUser, selectsignupErrors } from '../redux/slices/authSlice';
+import {
+  signupUser,
+  selectSignupErrors,
+  selectLoading,
+} from '../redux/slices/authSlice';
 
 function Copyright() {
   return (
@@ -47,10 +53,15 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
 export default function SignUp() {
-  const errors = useSelector(selectsignupErrors);
+  const errors = useSelector(selectSignupErrors);
+  const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
   const classes = useStyles();
   const [signupFormData, setSignupFormData] = useState({
@@ -70,8 +81,8 @@ export default function SignUp() {
 
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
+    console.log(loading);
     dispatch(signupUser(signupFormData));
-    console.log('in submit', errors);
   };
 
   return (
@@ -90,7 +101,7 @@ export default function SignUp() {
               <TextField
                 error={errors.username ? true : false}
                 helperText={errors.username}
-                value={setSignupFormData.username}
+                value={signupFormData.username}
                 onChange={handleChange}
                 autoComplete="fname"
                 name="username"
@@ -107,7 +118,7 @@ export default function SignUp() {
               <TextField
                 error={errors.email ? true : false}
                 helperText={errors.email}
-                value={setSignupFormData.email}
+                value={signupFormData.email}
                 onChange={handleChange}
                 variant="outlined"
                 required
@@ -122,7 +133,7 @@ export default function SignUp() {
               <TextField
                 error={errors.password ? true : false}
                 helperText={errors.password}
-                value={setSignupFormData.password}
+                value={signupFormData.password}
                 onChange={handleChange}
                 variant="outlined"
                 required
@@ -142,7 +153,7 @@ export default function SignUp() {
                     : false
                 }
                 helperText={errors.confirmpassword}
-                value={setSignupFormData.confirmPassword}
+                value={signupFormData.confirmPassword}
                 onChange={handleChange}
                 variant="outlined"
                 required
@@ -182,6 +193,11 @@ export default function SignUp() {
       <Box mt={5}>
         <Copyright />
       </Box>
+      {loading && (
+        <Backdrop className={classes.backdrop} open={true}>
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
     </Container>
   );
 }
