@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectIsAuthenticated } from '../../redux/slices/authSlice';
+import AddIcon from '@material-ui/icons/Add';
 import { logoutUser } from '../../redux/actions/authActions';
 
 const useStyles = makeStyles((theme) => ({
@@ -52,6 +53,9 @@ const Navbar = () => {
             <></>
           ) : isAuthenticated === true ? (
             <>
+              <Button color="inherit" component={Link} to="/create-post">
+                <AddIcon />
+              </Button>
               <Button color="inherit" component={Link} to="/profile">
                 My Profile
               </Button>

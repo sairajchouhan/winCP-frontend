@@ -14,6 +14,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import { loadUser } from './redux/actions/authActions';
 import ProfilePage from './pages/ProfilePage';
+import { Create } from '@material-ui/icons';
+import CreateWin from './pages/CreateWin';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -36,6 +38,7 @@ function App() {
           <Route exact path="/signup" component={SignupPage} />
           <PrivateRoute exact path="/profile" component={ProfilePage} />
           <PrivateRoute exact path="/home" component={HomePage} />
+          <PrivateRoute exact path="/create-post" component={CreateWin} />
         </Switch>
       </div>
     </ThemeProvider>
