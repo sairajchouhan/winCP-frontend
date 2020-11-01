@@ -8,7 +8,6 @@ import {
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  console.log(isAuthenticated);
   return (
     <Route
       {...rest}
