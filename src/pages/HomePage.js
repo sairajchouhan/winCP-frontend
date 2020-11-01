@@ -3,7 +3,8 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 
-// import { getAllWins, selectAllWins } from '../redux/slices/winsSlice';
+import { getAllWins } from '../redux/actions/winsActions';
+import Win from '../components/wins/Win';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,11 +19,31 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const wins = useSelector((state) => state.wins.allWins);
+
+  useEffect(() => {
+    async function callThis() {
+      console.log('I went to fetch the data ');
+      await dispatch(getAllWins());
+    }
+    callThis();
+  }, [dispatch]);
+
+  console.log(wins);
 
   return (
     <div>
       <Container className={classes.container}>
-        this is the container inthe home page
+        {wins &&
+          wins.map((eachWin) => (
+            <Win
+              username={eachWin.username}
+              body={eachWin.body}
+              createdAt={eachWin.createdAt}
+              key={eachWin.id}
+            />
+          ))}
       </Container>
     </div>
   );
