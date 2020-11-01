@@ -25,13 +25,11 @@ const Home = () => {
 
   useEffect(() => {
     async function callThis() {
-      console.log('I went to fetch the data ');
       await dispatch(getAllWins());
     }
     callThis();
   }, [dispatch]);
 
-  console.log(wins);
   if (wins === null || wins === undefined) {
     return <WinSkeleton />;
   }

@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react';
 // import jwtDecode from 'jwt-decode';
 import { Switch, Route } from 'react-router-dom';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import { useDispatch } from 'react-redux';
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+} from '@material-ui/core/styles';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Counter } from './pages/counter/Counter';
 import LandingPage from './pages/LandingPage';
@@ -14,15 +18,25 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import { loadUser } from './redux/actions/authActions';
 import ProfilePage from './pages/ProfilePage';
-import { Create } from '@material-ui/icons';
 import CreateWin from './pages/CreateWin';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+// import { selectLoading } from './redux/slices/authSlice';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
 const theme = createMuiTheme({});
 
+// const useStyles = makeStyles((theme) => ({
+//   backdrop: {
+//     zIndex: theme.zIndex.drawer + 1,
+//     color: '#fff',
+//   },
+// }));
+
 function App() {
+  // const classes = useStyles();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadUser());
@@ -30,6 +44,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="app">
+        {/* <Backdrop open={false} className={classes.backdrop}>
+          <CircularProgress color="inherit" />
+        </Backdrop> */}
         <Navbar />
         <Switch>
           <Route exact path="/" component={LandingPage} />

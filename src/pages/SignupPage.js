@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
@@ -24,6 +23,7 @@ import {
 } from '../redux/slices/authSlice';
 import { signupUser } from '../redux/actions/authActions';
 
+// eslint-disable-next-line no-unused-vars
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -39,7 +39,8 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -200,9 +201,7 @@ export default function SignUp() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
+
       {loading && (
         <Backdrop className={classes.backdrop} open={true}>
           <CircularProgress color="inherit" />
