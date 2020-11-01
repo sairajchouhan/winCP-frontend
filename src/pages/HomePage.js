@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { getAllWins } from '../redux/actions/winsActions';
 import Win from '../components/wins/Win';
+import WinSkeleton from '../components/skeletons/WinSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -31,6 +32,9 @@ const Home = () => {
   }, [dispatch]);
 
   console.log(wins);
+  if (wins === null || wins === undefined) {
+    return <WinSkeleton />;
+  }
 
   return (
     <div>
