@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { URL } from '../../utils/constants';
 
 import {
   LOGIN_FAIL,
@@ -15,10 +16,7 @@ import setAuthToken from '../../utils/setAuthToken';
 export const loginUser = (loginFormData) => async (dispatch) => {
   dispatch(SET_LOADING_TRUE());
   try {
-    const res = await axios.post(
-      'http://localhost:5001/wincp-9d49a/us-central1/api/login',
-      loginFormData
-    );
+    const res = await axios.post(`${URL}/login`, loginFormData);
     const token = res.data.token;
     if (token) localStorage.setItem('token', token);
     dispatch(LOGIN_SUCCESS(token));
@@ -33,10 +31,7 @@ export const loginUser = (loginFormData) => async (dispatch) => {
 export const signupUser = (signupFormData) => async (dispatch) => {
   dispatch(SET_LOADING_TRUE());
   try {
-    const res = await axios.post(
-      'http://localhost:5001/wincp-9d49a/us-central1/api/signup',
-      signupFormData
-    );
+    const res = await axios.post(`${URL}/signup`, signupFormData);
     const token = res.data.token;
     dispatch(SIGNUP_SUCCESS(token));
     dispatch(loadUser());
@@ -56,9 +51,7 @@ export const loadUser = () => async (dispatch) => {
     setAuthToken(localStorage.token);
   }
   try {
-    const res = await axios.get(
-      'http://localhost:5001/wincp-9d49a/us-central1/api/user'
-    );
+    const res = await axios.get(`${URL}/user`);
     dispatch(USER_LOADED(res.data));
   } catch (err) {
     dispatch(LOGOUT());

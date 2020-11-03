@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Card from '@material-ui/core/Card';
+import Grid from '@material-ui/core/Grid';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -17,7 +17,12 @@ import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutline
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import Tooltip from '@material-ui/core/Tooltip';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import classNames from 'classnames';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { URL } from '../../utils/constants';
+
+import { likeAWin } from '../../redux/actions/winsActions';
+import { selectUser } from '../../redux/slices/authSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,9 +51,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Win = ({ username, createdAt, body }) => {
+const Win = ({
+  username,
+  createdAt,
+  body,
+  likesCount,
+  commentsCount,
+  winId,
+}) => {
   const classes = useStyles();
-  const [like, setLike] = useState(false);
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+
+  const allLikes = user?.likes.map((like) => like.winId);
+  const likedDB = allLikes?.includes(winId);
+
+  const [liked, setLiked] = useState(likedDB);
+  const [dummyLikesCount, setDummyLikesCount] = useState(likesCount);
+
+  const handleLike = async () => {
+    console.log('I am liking');
+    setLiked((like) => !like);
+    setDummyLikesCount((dummyLikes) => dummyLikes + 1);
+    try {
+      const res = await axios.get(`${URL}/win/${winId}/like`);
+      console.log(res.data);
+    } catch (err) {
+      console.log('Error in liking the post');
+    }
+  };
+  const handleUnlike = async () => {
+    console.log('I am unliking ');
+    setLiked((like) => !like);
+    setDummyLikesCount((dummyLikes) => dummyLikes - 1);
+    try {
+      const res = await axios.get(`${URL}/win/${winId}/unlike`);
+      console.log(res.data);
+    } catch (err) {
+      console.log('Error in unliking the post');
+    }
+  };
+  console.log(liked);
+
+  useEffect(() => {
+    setLiked(likedDB);
+  }, [likedDB]);
+
   return (
     <Paper>
       <Card className={classes.root}>
@@ -68,27 +116,54 @@ const Win = ({ username, createdAt, body }) => {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <div>
-            {like ? (
-              <IconButton
-                aria-label="like"
-                onClick={() => setLike((like) => !like)}
+          <Grid container>
+            <Grid item>
+              <Grid
+                container
+                alignItems="flex-end"
+                style={{ marginRight: '10px' }}
               >
-                <FavoriteIcon color="secondary" />
-              </IconButton>
-            ) : (
-              <IconButton
-                aria-label="like"
-                onClick={() => setLike((like) => !like)}
-              >
-                <FavoriteBorderOutlinedIcon color="secondary" />
-              </IconButton>
-            )}
-          </div>
-
-          <IconButton aria-label="comment">
-            <ChatBubbleOutlineIcon color="primary" />
-          </IconButton>
+                {liked ? (
+                  <IconButton
+                    className={classes.icon}
+                    aria-label="like"
+                    onClick={() => handleUnlike()}
+                  >
+                    <FavoriteIcon color="secondary" />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    className={classes.icon}
+                    aria-label="like"
+                    onClick={() => handleLike()}
+                  >
+                    <FavoriteBorderOutlinedIcon color="secondary" />
+                  </IconButton>
+                )}
+                <Typography
+                  variant="button"
+                  color="textSecondary"
+                  component="p"
+                >
+                  {dummyLikesCount}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Grid container alignItems="flex-end">
+                <IconButton aria-label="comment">
+                  <ChatBubbleOutlineIcon color="primary" />
+                </IconButton>
+                <Typography
+                  variant="button"
+                  color="textSecondary"
+                  component="p"
+                >
+                  {commentsCount}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
         </CardActions>
       </Card>
     </Paper>

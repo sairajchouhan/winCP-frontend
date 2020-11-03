@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectIsAuthenticated } from '../../redux/slices/authSlice';
 import AddIcon from '@material-ui/icons/Add';
 import { logoutUser } from '../../redux/actions/authActions';
+import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,41 +41,43 @@ const Navbar = () => {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Toolbar>
-          <Typography
-            variant="h5"
-            component={Link}
-            to="/"
-            className={classes.title}
-          >
-            winCP
-          </Typography>
-          {isAuthenticated === null ? (
-            <></>
-          ) : isAuthenticated === true ? (
-            <>
-              <Button color="inherit" component={Link} to="/create-post">
-                <AddIcon />
-              </Button>
-              <Button color="inherit" component={Link} to="/profile">
-                My Profile
-              </Button>
-              <Button onClick={handleLogout} color="inherit">
-                Logout
-              </Button>
-            </>
-          ) : (
-            <>
-              <Button component={Link} to="/login" color="inherit">
-                Login
-              </Button>
+        <Container>
+          <Toolbar>
+            <Typography
+              variant="h5"
+              component={Link}
+              to="/"
+              className={classes.title}
+            >
+              winCP
+            </Typography>
+            {isAuthenticated === null ? (
+              <></>
+            ) : isAuthenticated === true ? (
+              <>
+                <Button color="inherit" component={Link} to="/create-post">
+                  <AddIcon />
+                </Button>
+                <Button color="inherit" component={Link} to="/profile">
+                  My Profile
+                </Button>
+                <Button onClick={handleLogout} color="inherit">
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button component={Link} to="/login" color="inherit">
+                  Login
+                </Button>
 
-              <Button component={Link} to="/signup" color="inherit">
-                SignUp
-              </Button>
-            </>
-          )}
-        </Toolbar>
+                <Button component={Link} to="/signup" color="inherit">
+                  SignUp
+                </Button>
+              </>
+            )}
+          </Toolbar>
+        </Container>
       </AppBar>
     </div>
   );
