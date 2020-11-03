@@ -8,9 +8,13 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { Link, Redirect } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useSelector, useDispatch } from 'react-redux';
@@ -69,10 +73,19 @@ export default function Login() {
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   if (isAuthenticated) {
     return <Redirect to="/home" />;
   }
+
+  const handleClickShowPassword = () => {
+    setShowPassword((showPassword) => !showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -127,6 +140,18 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
