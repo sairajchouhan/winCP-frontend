@@ -16,7 +16,10 @@ import setAuthToken from '../../utils/setAuthToken';
 export const loginUser = (loginFormData) => async (dispatch) => {
   dispatch(SET_LOADING_TRUE());
   try {
-    const res = await axios.post(`${URL}/login`, loginFormData);
+    const res = await axios.post(
+      `http://localhost:5001/wincp-9d49a/us-central1/api/login`,
+      loginFormData
+    );
     const token = res.data.token;
     if (token) localStorage.setItem('token', token);
     dispatch(LOGIN_SUCCESS(token));
