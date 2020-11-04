@@ -1,29 +1,22 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import InsertCommentIcon from '@material-ui/icons/InsertComment';
+import { useHistory } from 'react-router-dom';
+
 import Typography from '@material-ui/core/Typography';
 
-const CommentBtn = ({ showComment, setShowComment, commentsCount }) => {
+const CommentBtn = ({ commentsCount, winId }) => {
+  const history = useHistory();
   return (
     <Grid item>
       <Grid container alignItems="flex-end">
-        {showComment ? (
-          <IconButton
-            aria-label="comment"
-            onClick={() => setShowComment((showComment) => !showComment)}
-          >
-            <ChatBubbleIcon color="primary" />
-          </IconButton>
-        ) : (
-          <IconButton
-            aria-label="comment"
-            onClick={() => setShowComment((showComment) => !showComment)}
-          >
-            <ChatBubbleOutlineIcon color="primary" />
-          </IconButton>
-        )}
+        <IconButton
+          aria-label="comment"
+          onClick={() => history.push(`/win/${winId}`)}
+        >
+          <InsertCommentIcon color="primary" />
+        </IconButton>
 
         <Typography variant="button" color="textSecondary" component="p">
           {commentsCount}

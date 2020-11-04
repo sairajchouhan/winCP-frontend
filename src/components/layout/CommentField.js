@@ -7,11 +7,13 @@ import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core';
+import axios from 'axios';
+import { URL } from '../../utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   comment: {
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(6),
     width: '100%',
   },
   commentGridItem: {
@@ -19,14 +21,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Comment = ({ showComment }) => {
+const Comment = ({ showComment, winId, setData }) => {
   const classes = useStyles();
   const [comment, setComment] = useState('');
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
     console.log('submited');
-
+    try {
+      const res = await axios.post(`${URL}/win/${winId}/comment`, {
+        body: comment,
+      });
+      console.log(res.data);
+    } catch (err) {
+      console.log('error in posting the comment');
+    }
     setComment('');
   };
 

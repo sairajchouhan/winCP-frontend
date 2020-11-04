@@ -1,14 +1,10 @@
 import React, { useEffect } from 'react';
 // import jwtDecode from 'jwt-decode';
 import { Switch, Route } from 'react-router-dom';
-import {
-  createMuiTheme,
-  makeStyles,
-  ThemeProvider,
-} from '@material-ui/core/styles';
-import { useDispatch, useSelector } from 'react-redux';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { useDispatch } from 'react-redux';
+import { loadUser } from './redux/actions/authActions';
 
-import { Counter } from './pages/counter/Counter';
 import LandingPage from './pages/LandingPage';
 import Navbar from './components/layout/Navbar';
 import HomePage from './pages/HomePage';
@@ -16,11 +12,10 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import setAuthToken from './utils/setAuthToken';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import { loadUser } from './redux/actions/authActions';
 import ProfilePage from './pages/ProfilePage';
 import CreateWin from './pages/CreateWin';
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import EachWin from './pages/EachWin';
+
 // import { selectLoading } from './redux/slices/authSlice';
 
 if (localStorage.token) {
@@ -44,18 +39,15 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="app">
-        {/* <Backdrop open={false} className={classes.backdrop}>
-          <CircularProgress color="inherit" />
-        </Backdrop> */}
         <Navbar />
         <Switch>
           <Route exact path="/" component={LandingPage} />
-          <Route exact path="/counter" component={Counter} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/signup" component={SignupPage} />
           <PrivateRoute exact path="/profile" component={ProfilePage} />
           <PrivateRoute exact path="/home" component={HomePage} />
           <PrivateRoute exact path="/create-post" component={CreateWin} />
+          <PrivateRoute exact path="/win/:winId" component={EachWin} />
         </Switch>
       </div>
     </ThemeProvider>

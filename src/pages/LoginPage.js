@@ -96,7 +96,6 @@ export default function Login() {
   };
 
   const handleChange = (e) => {
-    console.log('change is happenes');
     setLogInFormData({
       ...logInFormData,
       [e.target.name]: e.target.value,

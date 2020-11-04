@@ -25,7 +25,6 @@ const Home = () => {
 
   useEffect(() => {
     async function callThis() {
-      console.log('I will refetch wins');
       await dispatch(getAllWins());
     }
     callThis();
@@ -36,22 +35,20 @@ const Home = () => {
   }
 
   return (
-    <div>
-      <Container className={classes.container}>
-        {wins &&
-          wins.map((eachWin) => (
-            <Win
-              username={eachWin.username}
-              body={eachWin.body}
-              createdAt={eachWin.createdAt}
-              likesCount={eachWin.likesCount}
-              commentsCount={eachWin.commentsCount}
-              key={eachWin.id}
-              winId={eachWin.id}
-            />
-          ))}
-      </Container>
-    </div>
+    <Container className={classes.container}>
+      {wins &&
+        wins.map((eachWin) => (
+          <Win
+            username={eachWin.username}
+            body={eachWin.body}
+            createdAt={eachWin.createdAt}
+            likesCount={eachWin.likesCount}
+            commentsCount={eachWin.commentsCount}
+            key={eachWin.id}
+            winId={eachWin.id}
+          />
+        ))}
+    </Container>
   );
 };
 
