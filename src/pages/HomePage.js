@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getAllWins, likeAWin } from '../redux/actions/winsActions';
+import { getAllWins } from '../redux/actions/winsActions';
 import Win from '../components/wins/Win';
 import WinSkeleton from '../components/skeletons/WinSkeleton';
 
@@ -25,6 +25,7 @@ const Home = () => {
 
   useEffect(() => {
     async function callThis() {
+      console.log('I will refetch wins');
       await dispatch(getAllWins());
     }
     callThis();

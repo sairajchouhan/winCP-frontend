@@ -4,10 +4,11 @@ import { URL } from '../../utils/constants';
 
 export const getAllWins = () => async (dispatch) => {
   try {
-    const res = await axios.get(`${URL}/wins`);
-    if (res.data) {
-      dispatch(SET_ALL_WINS(res.data));
-    }
+    const res = await axios.get(`${URL}/wins`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+
+    dispatch(SET_ALL_WINS(res.data));
   } catch (err) {
     if (err.response) {
       // The request was made and the server responded with a status code

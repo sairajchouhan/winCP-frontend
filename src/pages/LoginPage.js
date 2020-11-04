@@ -18,6 +18,7 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { loginUser } from '../redux/actions/authActions';
 import {
@@ -68,6 +69,7 @@ export default function Login() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
+  const history = useHistory();
   const classes = useStyles();
   const [logInFormData, setLogInFormData] = useState({
     email: '',
@@ -90,6 +92,7 @@ export default function Login() {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     await dispatch(loginUser(logInFormData));
+    history.push('/home');
   };
 
   const handleChange = (e) => {

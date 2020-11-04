@@ -76,6 +76,7 @@ export const selectSignupErrors = (state) => state.auth.signupErrors;
 export const selectLoading = (state) => state.auth.loading;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 export const selectUser = (state) => state.auth.user;
+export const selectUserLikes = (state) => state.auth.user?.likes;
 
 export default authSlice.reducer;
 

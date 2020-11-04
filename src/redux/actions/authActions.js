@@ -12,6 +12,7 @@ import {
   USER_LOADED,
 } from '../slices/authSlice';
 import setAuthToken from '../../utils/setAuthToken';
+import { SET_WINS_EMPTY } from '../slices/winsSlice';
 
 export const loginUser = (loginFormData) => async (dispatch) => {
   dispatch(SET_LOADING_TRUE());
@@ -25,7 +26,6 @@ export const loginUser = (loginFormData) => async (dispatch) => {
     dispatch(LOGIN_SUCCESS(token));
     dispatch(loadUser());
   } catch (err) {
-    dispatch(SET_LOADING_TRUE());
     dispatch(LOGIN_FAIL(err.response.data.errors));
   }
   dispatch(SET_LOADING_FALSE());
@@ -47,6 +47,7 @@ export const signupUser = (signupFormData) => async (dispatch) => {
 
 export const logoutUser = () => async (dispatch) => {
   dispatch(LOGOUT());
+  dispatch(SET_WINS_EMPTY());
 };
 
 export const loadUser = () => async (dispatch) => {

@@ -11,6 +11,8 @@ import AddIcon from '@material-ui/icons/Add';
 import { logoutUser } from '../../redux/actions/authActions';
 import Container from '@material-ui/core/Container';
 
+import { getAllWins } from '../../redux/actions/winsActions';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -38,6 +40,11 @@ const Navbar = () => {
     history.push('/');
   };
 
+  const refetchPosts = async () => {
+    console.log('I will refetch wins');
+    await dispatch(getAllWins());
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -46,7 +53,8 @@ const Navbar = () => {
             <Typography
               variant="h5"
               component={Link}
-              to="/"
+              onClick={refetchPosts}
+              to="/home"
               className={classes.title}
             >
               winCP

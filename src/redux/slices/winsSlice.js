@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 
 const initialState = {
   allWins: null,
@@ -12,6 +11,9 @@ export const winsSlice = createSlice({
   reducers: {
     SET_ALL_WINS: (state, action) => {
       state.allWins = action.payload;
+    },
+    SET_WINS_EMPTY: (state) => {
+      state.allWins = [];
     },
     SET_LOADING_TRUE: (state) => {
       state.loading = true;
@@ -26,6 +28,7 @@ export const {
   SET_ALL_WINS,
   SET_LOADING_TRUE,
   SET_LOADING_FALSE,
+  SET_WINS_EMPTY,
 } = winsSlice.actions;
 
 export default winsSlice.reducer;

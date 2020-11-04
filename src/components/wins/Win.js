@@ -12,18 +12,15 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import FavoriteBorderOutlinedIcon from '@material-ui/icons/FavoriteBorderOutlined';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
-import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 import { URL } from '../../utils/constants';
 
 import { likeAWin } from '../../redux/actions/winsActions';
-import { selectUser } from '../../redux/slices/authSlice';
-import Comment from '../layout/CommentField';
+import { seletUser } from '../../redux/slices/authSlice';
+import CommentField from '../layout/CommentField';
+import LikeBtn from '../layout/LikeBtn';
+import CommentBtn from '../layout/CommentBtn';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,42 +48,8 @@ const Win = ({
   winId,
 }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const user = useSelector(selectUser);
-
-  const allLikes = user?.likes.map((like) => like.winId);
-  const likedDB = allLikes?.includes(winId);
-
-  const [liked, setLiked] = useState(likedDB);
-  const [dummyLikesCount, setDummyLikesCount] = useState(likesCount);
   const [showComment, setShowComment] = useState(false);
-
-  const handleLike = async () => {
-    console.log('I am liking');
-    setLiked((like) => !like);
-    setDummyLikesCount((dummyLikes) => dummyLikes + 1);
-    try {
-      const res = await axios.get(`${URL}/win/${winId}/like`);
-      console.log(res.data);
-    } catch (err) {
-      console.log('Error in liking the post');
-    }
-  };
-  const handleUnlike = async () => {
-    console.log('I am unliking ');
-    setLiked((like) => !like);
-    setDummyLikesCount((dummyLikes) => dummyLikes - 1);
-    try {
-      const res = await axios.get(`${URL}/win/${winId}/unlike`);
-      console.log(res.data);
-    } catch (err) {
-      console.log('Error in unliking the post');
-    }
-  };
-
-  useEffect(() => {
-    setLiked(likedDB);
-  }, [likedDB]);
+  console.log('I am in Win.js');
 
   return (
     <Paper>
@@ -100,7 +63,6 @@ const Win = ({
           title={username}
           subheader={moment(createdAt).fromNow()}
         />
-
         <CardContent>
           <Typography variant="body1" color="textSecondary" component="p">
             {body}
@@ -108,72 +70,15 @@ const Win = ({
         </CardContent>
         <CardActions disableSpacing>
           <Grid container>
-            <Grid item>
-              <Grid
-                container
-                alignItems="flex-end"
-                style={{ marginRight: '10px' }}
-              >
-                {liked ? (
-                  <IconButton
-                    className={classes.icon}
-                    aria-label="like"
-                    onClick={() => handleUnlike()}
-                  >
-                    <FavoriteIcon color="secondary" />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    className={classes.icon}
-                    aria-label="like"
-                    onClick={() => handleLike()}
-                  >
-                    <FavoriteBorderOutlinedIcon color="secondary" />
-                  </IconButton>
-                )}
-                <Typography
-                  variant="button"
-                  color="textSecondary"
-                  component="p"
-                >
-                  {dummyLikesCount}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Grid container alignItems="flex-end">
-                {showComment ? (
-                  <IconButton
-                    aria-label="comment"
-                    onClick={() =>
-                      setShowComment((showComment) => !showComment)
-                    }
-                  >
-                    <ChatBubbleIcon color="primary" />
-                  </IconButton>
-                ) : (
-                  <IconButton
-                    aria-label="comment"
-                    onClick={() =>
-                      setShowComment((showComment) => !showComment)
-                    }
-                  >
-                    <ChatBubbleOutlineIcon color="primary" />
-                  </IconButton>
-                )}
-
-                <Typography
-                  variant="button"
-                  color="textSecondary"
-                  component="p"
-                >
-                  {commentsCount}
-                </Typography>
-              </Grid>
-            </Grid>
+            <LikeBtn likesCount={likesCount} winId={winId} />
+            <CommentBtn
+              showComment={showComment}
+              setShowComment={setShowComment}
+              commentsCount={commentsCount}
+            />
           </Grid>
         </CardActions>
-        <Comment showComment={showComment} />
+        <CommentField showComment={showComment} />
       </Card>
     </Paper>
   );

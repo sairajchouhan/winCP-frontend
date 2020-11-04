@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   commentGridItem: {
-    width: '85%',
+    width: '90%',
   },
 }));
 
