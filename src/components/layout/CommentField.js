@@ -29,10 +29,11 @@ const Comment = ({ showComment, winId, setData }) => {
     e.preventDefault();
     console.log('submited');
     try {
-      const res = await axios.post(`${URL}/win/${winId}/comment`, {
+      await axios.post(`${URL}/win/${winId}/comment`, {
         body: comment,
       });
-      console.log(res.data);
+      const refetch = await axios.get(`${URL}/win/${winId}`);
+      setData(refetch.data);
     } catch (err) {
       console.log('error in posting the comment');
     }

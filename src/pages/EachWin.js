@@ -19,6 +19,7 @@ import LikeBtn from '../components/layout/LikeBtn';
 import CommentBtn from '../components/layout/CommentBtn';
 import WinSkeleton from '../components/skeletons/WinSkeleton';
 import CommentField from '../components/layout/CommentField';
+import EachComment from '../components/layout/EachComment';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -91,6 +92,10 @@ const EachWin = () => {
             showComment={true}
             winId={data.winId}
           />
+          {data.comments &&
+            data.comments.map((comment) => (
+              <EachComment setData={setData} comment={comment} />
+            ))}
         </Card>
       </Paper>
     </Container>
