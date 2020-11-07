@@ -10,6 +10,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
 import { URL } from '../../utils/constants';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../redux/slices/authSlice';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -32,6 +34,7 @@ const EachComment = ({
   comment: { winId, body, createdAt, username, commentId },
   setData,
 }) => {
+  const user = useSelector(selectUser);
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -77,22 +80,26 @@ const EachComment = ({
               </Typography>
             </Grid>
             <Grid item justify="flex-end" className={classes.threeDotIcon}>
-              <IconButton
-                aria-controls="comments-options-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-              >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleDeleteComment}>Delete </MenuItem>
-              </Menu>
+              {user && user.info.username === username && (
+                <>
+                  <IconButton
+                    aria-controls="comments-options-menu"
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleDeleteComment}>Delete </MenuItem>
+                  </Menu>
+                </>
+              )}
             </Grid>
           </Grid>
         </Grid>
