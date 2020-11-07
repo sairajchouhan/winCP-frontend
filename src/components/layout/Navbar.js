@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,7 +16,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
-
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import { getAllWins } from '../../redux/actions/winsActions';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(4),
     height: theme.spacing(4),
   },
+  list: {
+    width: 250,
+  },
 }));
 
 const Navbar = () => {
@@ -46,7 +54,19 @@ const Navbar = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open) => (event) => {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+
+    setDrawerOpen(open);
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -67,6 +87,34 @@ const Navbar = () => {
     console.log('I will refetch wins');
     await dispatch(getAllWins());
   };
+
+  const list = (anchor) => (
+    <div
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+      className={classes.list}
+    >
+      <List>
+        <ListItem button>
+          <ListItemText primary={'asdfasdf'} />
+        </ListItem>
+      </List>
+      <Divider />
+      <List>
+        <ListItem button>
+          <ListItemText primary={'asdfasdf'} />
+        </ListItem>
+      </List>
+      <Divider />
+      <List>
+        <ListItem button>
+          <ListItemText primary={'asdfasdf'} />
+        </ListItem>
+      </List>
+      <Divider />
+    </div>
+  );
 
   return (
     <div className={classes.root}>
@@ -91,13 +139,25 @@ const Navbar = () => {
                     <AddIcon />
                   </Button>
                 </Tooltip>
-                <Tooltip title="Notifications" placement="bottom">
-                  <Button className={classes.button}>
-                    <Badge badgeContent={4} color="secondary">
-                      <NotificationsIcon color="white" />
-                    </Badge>
-                  </Button>
-                </Tooltip>
+                <>
+                  <Tooltip title="Notifications" placement="bottom">
+                    <Button
+                      onClick={toggleDrawer(true)}
+                      className={classes.button}
+                    >
+                      <Badge badgeContent={4} color="secondary">
+                        <NotificationsIcon color="white" />
+                      </Badge>
+                    </Button>
+                  </Tooltip>
+                  <Drawer
+                    anchor={'right'}
+                    open={drawerOpen}
+                    onClose={toggleDrawer(false)}
+                  >
+                    {list('right')}
+                  </Drawer>
+                </>
 
                 <Button
                   aria-controls="simple-menu"
@@ -117,15 +177,17 @@ const Navbar = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem
-                    component={Link}
-                    to="/profile"
-                    onClick={handleClose}
-                  >
-                    Profile
-                  </MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
-                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  <>
+                    <MenuItem
+                      component={Link}
+                      to="/profile"
+                      onClick={handleClose}
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                  </>
                 </Menu>
               </>
             ) : (
