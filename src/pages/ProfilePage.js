@@ -58,7 +58,7 @@ const ProfilePage = () => {
               <img
                 className={classes.img}
                 alt="complex"
-                src="https://firebasestorage.googleapis.com/v0/b/wincp-9d49a.appspot.com/o/defaultProfilePic.svg?alt=media&token=e4dc1db7-fc01-4171-a950-3fe659d3b346"
+                src="https://material-ui.com/static/images/avatar/2.jpg"
               />
             </ButtonBase>
           </Grid>

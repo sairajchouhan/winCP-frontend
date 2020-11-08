@@ -20,7 +20,6 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getAllWins } from '../../redux/actions/winsActions';
 
@@ -167,7 +166,7 @@ const Navbar = () => {
                   <Avatar
                     className={classes.avatar}
                     alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
+                    src="https://material-ui.com/static/images/avatar/2.jpg"
                   />
                 </Button>
                 <Menu
@@ -185,7 +184,7 @@ const Navbar = () => {
                     >
                       Profile
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                    <MenuItem onClick={handleClose}>My Wins</MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </>
                 </Menu>

@@ -7,12 +7,14 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+
 import TextField from '@material-ui/core/TextField';
 import { createWin } from '../redux/actions/winsActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../redux/slices/winsSlice';
+import ProgressBar from '../components/layout/ProgressBar';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -29,17 +31,36 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
+  progress: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const CreatePost = () => {
   const classes = useStyles();
   const [data, setData] = useState({ body: '' });
+  const [image, setImage] = useState(null);
+  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
   const loading = useSelector((state) => state.wins.loading);
 
+  const types = ['image/png', 'image/jpeg'];
+
+  const imageChangeHandler = (e) => {
+    let selected = e.target.files[0];
+    console.log(selected);
+    if (selected && types.includes(selected.type)) {
+      setImage(selected);
+      setError(null);
+    } else {
+      setImage(null);
+      setError('please select a image file(png or jpeg)');
+    }
+  };
+
   const handlePostSubmit = async (e) => {
-    console.log('about to create a post');
     e.preventDefault();
     dispatch(SET_LOADING_TRUE());
     await createWin(data);
@@ -54,6 +75,7 @@ const CreatePost = () => {
           <Grid item>
             <Typography variant="h4">Create Post</Typography>
           </Grid>
+
           <Grid container item xs={12}>
             <form className={classes.form} onSubmit={handlePostSubmit}>
               <TextField
@@ -73,9 +95,46 @@ const CreatePost = () => {
                 label="Body of the post"
                 name="body"
               />
-              <Button type="submit" variant="outlined" color="primary">
-                Submit
-              </Button>
+              <Grid item container className={classes.progress}>
+                {error && (
+                  <Typography color="error" gutterBottom>
+                    {error}
+                  </Typography>
+                )}
+                {image && <Typography gutterBottom>{image.name}</Typography>}
+                {image && (
+                  <ProgressBar
+                    style={{ width: '100%' }}
+                    image={image}
+                    setImage={setImage}
+                  />
+                )}
+              </Grid>
+              <Grid container justify="space-between">
+                <Grid item>
+                  <label htmlFor="upload-photo">
+                    <input
+                      style={{ display: 'none' }}
+                      id="upload-photo"
+                      name="upload-photo"
+                      type="file"
+                      onChange={imageChangeHandler}
+                    />
+
+                    <Button
+                      color="secondary"
+                      variant="outlined"
+                      component="span"
+                    >
+                      Upload Image
+                    </Button>
+                  </label>
+                </Grid>
+
+                <Button type="submit" variant="outlined" color="primary">
+                  Submit
+                </Button>
+              </Grid>
             </form>
           </Grid>
         </Grid>

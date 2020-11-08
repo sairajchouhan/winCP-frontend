@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^7.2.1",
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
+    "firebase": "^8.0.1",
     "fontsource-roboto": "^3.0.3",
     "jwt-decode": "^3.0.0",
     "moment": "^2.29.1",
@@ -42,5 +43,4 @@
       "last 1 safari version"
     ]
   }
-  
 }
