@@ -9,15 +9,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProgressBar = ({ image, setImage }) => {
+const ProgressBar = ({ image, setImage, setStoreImage, storeImage }) => {
   const classes = useStyles();
   const { url, progress } = useStorage(image);
   console.log(progress, url);
   useEffect(() => {
     if (url) {
+      setStoreImage({ ...storeImage, url, image });
       setImage(null);
     }
-  }, [url, setImage]);
+  }, [url, setImage, setStoreImage, image, storeImage]);
   return (
     <LinearProgress
       className={classes.progress}

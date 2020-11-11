@@ -10,8 +10,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import TextField from '@material-ui/core/TextField';
 import { createWin } from '../redux/actions/winsActions';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { storage } from '../firebase/config';
 
 import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../redux/slices/winsSlice';
 import ProgressBar from '../components/layout/ProgressBar';
@@ -26,7 +29,10 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%',
   },
-
+  media: {
+    height: 100,
+    paddingTop: '56.25%', // 16:9
+  },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
@@ -38,9 +44,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreatePost = () => {
+  const storageRef = storage.ref();
   const classes = useStyles();
   const [data, setData] = useState({ body: '' });
   const [image, setImage] = useState(null);
+  const [storeImage, setStoreImage] = useState({});
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -66,6 +74,25 @@ const CreatePost = () => {
     await createWin(data);
     dispatch(SET_LOADING_FALSE());
     history.push('/home');
+  };
+
+  const handleImageDelete = () => {
+    const desertRef = storageRef.child(storeImage?.image?.name);
+    desertRef
+      .delete()
+      .then(function () {
+        // File deleted successfully
+        console.log('file deleted successfully');
+        setImage(null);
+        setStoreImage({});
+      })
+      .catch(function (error) {
+        console.log(error);
+        // Uh-oh, an error occurred!
+        console.log('error deleting the file from firebase storage');
+        setImage(null);
+        setStoreImage({});
+      });
   };
 
   return (
@@ -95,15 +122,33 @@ const CreatePost = () => {
                 label="Body of the post"
                 name="body"
               />
+              <Grid item container direction="column">
+                <Grid item>
+                  <img style={{ width: '25%' }} src={storeImage?.url} alt="" />
+                </Grid>
+                <Grid>
+                  {image?.name}
+                  {storeImage?.url && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleImageDelete}
+                    >
+                      delete
+                    </Button>
+                  )}
+                </Grid>
+              </Grid>
               <Grid item container className={classes.progress}>
                 {error && (
                   <Typography color="error" gutterBottom>
                     {error}
                   </Typography>
                 )}
-                {image && <Typography gutterBottom>{image.name}</Typography>}
                 {image && (
                   <ProgressBar
+                    storeImage={storeImage}
+                    setStoreImage={setStoreImage}
                     style={{ width: '100%' }}
                     image={image}
                     setImage={setImage}
