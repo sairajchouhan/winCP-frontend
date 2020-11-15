@@ -40,6 +40,7 @@ const Home = () => {
         wins.map((eachWin) => (
           <Win
             username={eachWin.username}
+            title={eachWin.title}
             body={eachWin.body}
             createdAt={eachWin.createdAt}
             likesCount={eachWin.likesCount}

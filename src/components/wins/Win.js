@@ -4,12 +4,12 @@ import moment from 'moment';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 
@@ -31,17 +31,22 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  title: {
+    cursor: 'pointer',
+  },
 }));
 
 const Win = ({
   username,
   createdAt,
   body,
+  title,
   likesCount,
   commentsCount,
   winId,
 }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <Paper>
@@ -56,7 +61,18 @@ const Win = ({
           subheader={moment(createdAt).fromNow()}
         />
         <CardContent>
-          <Typography variant="body1" color="textSecondary" component="p">
+          <Typography
+            variant="h6"
+            color="black"
+            component="p"
+            className={classes.title}
+            onClick={() => {
+              history.push(`/win/${winId}`);
+            }}
+          >
+            {title}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
             {body}
           </Typography>
         </CardContent>
@@ -66,8 +82,6 @@ const Win = ({
             <CommentBtn winId={winId} commentsCount={commentsCount} />
           </Grid>
         </CardActions>
-        {/* <CommentField winId={winId} showComment={showComment} /> */}
-        {/* <EachComment showComment={showComment} /> */}
       </Card>
     </Paper>
   );

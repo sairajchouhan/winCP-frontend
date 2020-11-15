@@ -51,14 +51,26 @@ export const createWin = async (data) => {
     console.log(res.data);
   } catch (err) {
     console.log('error in posting a new Post');
+    return err.response.data.errors;
   }
 };
 
 export const likeAWin = async (winId) => {
   try {
-    const res = await axios.get(`/win/${winId}/like`);
+    const res = await axios.get(`${URL}/win/${winId}/like`);
     console.log(res.data);
   } catch (error) {
     console.log('error in liking the post');
+  }
+};
+
+export const deleteAWin = async (winId) => {
+  try {
+    await axios.delete(`${URL}/win/${winId}`);
+    console.log('successfully deleted the post');
+  } catch (err) {
+    console.log('error in delteing the post');
+    console.log(err.response);
+    return false;
   }
 };

@@ -44,117 +44,80 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CreatePost = () => {
-  const storageRef = storage.ref();
   const classes = useStyles();
-  const [data, setData] = useState({ body: '' });
-  const [image, setImage] = useState(null);
-  const [storeImage, setStoreImage] = useState({});
-  const [error, setError] = useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
   const loading = useSelector((state) => state.wins.loading);
 
-  const types = ['image/png', 'image/jpeg'];
+  const [data, setData] = useState({ body: '', title: '' });
+  const [errors, setErrors] = useState({});
+  const handleChange = (e) => {
+    console.log('inside of handle change');
 
-  const imageChangeHandler = (e) => {
-    let selected = e.target.files[0];
-    console.log(selected);
-    if (selected && types.includes(selected.type)) {
-      setImage(selected);
-      setError(null);
-    } else {
-      setImage(null);
-      setError('please select a image file(png or jpeg)');
-    }
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
+
     dispatch(SET_LOADING_TRUE());
-    await createWin(data);
+    const resErrors = await createWin(data);
+    setErrors({ ...resErrors });
     dispatch(SET_LOADING_FALSE());
-    history.push('/home');
+    if (!resErrors) {
+      history.push('/home');
+    }
   };
-
-  const handleImageDelete = () => {
-    const desertRef = storageRef.child(storeImage?.image?.name);
-    desertRef
-      .delete()
-      .then(function () {
-        // File deleted successfully
-        console.log('file deleted successfully');
-        setImage(null);
-        setStoreImage({});
-      })
-      .catch(function (error) {
-        console.log(error);
-        // Uh-oh, an error occurred!
-        console.log('error deleting the file from firebase storage');
-        setImage(null);
-        setStoreImage({});
-      });
-  };
-
+  console.log(errors);
   return (
     <Container className={classes.container} maxWidth="md">
       <Paper className={classes.paper} elevation={3}>
         <Grid container>
           <Grid item>
-            <Typography variant="h4">Create Post</Typography>
+            <Typography variant="h4">Create Win</Typography>
           </Grid>
 
           <Grid container item xs={12}>
-            <form className={classes.form} onSubmit={handlePostSubmit}>
+            <form
+              className={classes.form}
+              onSubmit={handlePostSubmit}
+              noValidate
+            >
+              <TextField
+                value={data.title}
+                error={errors?.title}
+                helperText={errors?.title}
+                className={classes.title}
+                onChange={handleChange}
+                variant="filled"
+                margin="normal"
+                required
+                fullWidth
+                id="title"
+                label="Title of the win"
+                name="title"
+              />
+
               <TextField
                 value={data.body}
-                onChange={(e) => {
-                  console.log('chaning');
-                  setData((data) => ({ ...data, body: e.target.value }));
-                }}
+                error={errors?.body}
+                helperText={errors?.body}
+                onChange={handleChange}
                 className={classes.body}
                 multiline={true}
                 rows={10}
-                variant="outlined"
+                variant="filled"
                 margin="normal"
                 required
                 fullWidth
                 id="body"
-                label="Body of the post"
+                label="Body of the win"
                 name="body"
               />
-              <Grid item container direction="column">
-                <Grid item>
-                  <img style={{ width: '25%' }} src={storeImage?.url} alt="" />
-                </Grid>
-                <Grid>
-                  {image?.name}
-                  {storeImage?.url && (
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      onClick={handleImageDelete}
-                    >
-                      delete
-                    </Button>
-                  )}
-                </Grid>
-              </Grid>
-              <Grid item container className={classes.progress}>
-                {error && (
-                  <Typography color="error" gutterBottom>
-                    {error}
-                  </Typography>
-                )}
-                {image && (
-                  <ProgressBar
-                    storeImage={storeImage}
-                    setStoreImage={setStoreImage}
-                    style={{ width: '100%' }}
-                    image={image}
-                    setImage={setImage}
-                  />
-                )}
-              </Grid>
+
               <Grid container justify="space-between">
                 <Grid item>
                   <label htmlFor="upload-photo">
@@ -163,9 +126,7 @@ const CreatePost = () => {
                       id="upload-photo"
                       name="upload-photo"
                       type="file"
-                      onChange={imageChangeHandler}
                     />
-
                     <Button
                       color="secondary"
                       variant="outlined"
@@ -175,7 +136,6 @@ const CreatePost = () => {
                     </Button>
                   </label>
                 </Grid>
-
                 <Button type="submit" variant="outlined" color="primary">
                   Submit
                 </Button>
