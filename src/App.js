@@ -16,31 +16,23 @@ import ProfilePage from './pages/ProfilePage';
 import CreateWin from './pages/CreateWin';
 import EachWin from './pages/EachWin';
 import EditProfile from './pages/EditProfile';
-
-// import { selectLoading } from './redux/slices/authSlice';
+import Snackbar from './components/utils/Snackbar';
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
 const theme = createMuiTheme({});
 
-// const useStyles = makeStyles((theme) => ({
-//   backdrop: {
-//     zIndex: theme.zIndex.drawer + 1,
-//     color: '#fff',
-//   },
-// }));
-
 function App() {
-  // const classes = useStyles();
-
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadUser());
   });
   return (
     <ThemeProvider theme={theme}>
       <div className="app">
+        <Snackbar />
         <Navbar />
         <Switch>
           <Route exact path="/" component={LandingPage} />

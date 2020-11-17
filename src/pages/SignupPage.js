@@ -26,6 +26,8 @@ import {
   selectIsAuthenticated,
 } from '../redux/slices/authSlice';
 import { signupUser } from '../redux/actions/authActions';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 // eslint-disable-next-line no-unused-vars
 function Copyright() {

@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../redux/slices/winsSlice';
+import { ERROR, SUCCESS } from '../utils/constants';
+import { setSnackbar } from '../redux/slices/snackbarSlice';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -63,6 +65,9 @@ const CreatePost = () => {
     dispatch(SET_LOADING_FALSE());
     if (!resErrors) {
       history.push('/home');
+      setSnackbar(dispatch, true, SUCCESS, 'Win created successfully');
+    } else {
+      setSnackbar(dispatch, true, ERROR, 'Something went wrong');
     }
   };
   return (

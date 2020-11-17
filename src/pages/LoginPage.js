@@ -26,6 +26,8 @@ import {
   selectLoading,
   selectIsAuthenticated,
 } from '../redux/slices/authSlice';
+import { setSnackbar } from '../redux/slices/snackbarSlice';
+import { SUCCESS } from '../utils/constants';
 
 // function Copyright() {
 //   return (
@@ -93,6 +95,7 @@ export default function Login() {
     e.preventDefault();
     await dispatch(loginUser(logInFormData));
     history.push('/home');
+    setSnackbar(dispatch, true, SUCCESS, 'Successfully logged in');
   };
 
   const handleChange = (e) => {

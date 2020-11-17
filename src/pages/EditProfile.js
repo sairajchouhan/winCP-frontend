@@ -15,6 +15,8 @@ import Button from '@material-ui/core/Button';
 import { editUserProfile } from '../redux/actions/userActions';
 import { loadUser } from '../redux/actions/authActions';
 import UpdateProfileSkeleton from '../components/skeletons/UpdateProfileSkeleton';
+import { setSnackbar } from '../redux/slices/snackbarSlice';
+import { ERROR, SUCCESS } from '../utils/constants';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -69,8 +71,9 @@ const EditProfile = () => {
     if (success) {
       await dispatch(loadUser());
       history.push('/profile');
+      setSnackbar(dispatch, true, SUCCESS, 'Profile updated successfully');
     } else {
-      console.log('something went wrong');
+      setSnackbar(dispatch, true, ERROR, 'Something went wrong');
     }
     setLoading((loading) => !loading);
   };
