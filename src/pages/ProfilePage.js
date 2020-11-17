@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
   img: {
     borderRadius: '50%',
+    width: '200px',
+    objectFit: 'contain',
   },
 
   paper: {
@@ -92,8 +94,7 @@ const ProfilePage = () => {
               <img
                 className={classes.img}
                 alt="complex"
-                src="https://material-ui.com/static/images/avatar/2.jpg"
-                onLoad={() => console.log('Image Loading')}
+                src={user?.info.profileImgUrl}
               />
             </ButtonBase>
           </Grid>
@@ -120,7 +121,7 @@ const ProfilePage = () => {
             {user.info.website && (
               <Typography gutterBottom variant="body1">
                 <Link href={user.info.website} target="_blank" rel="noreferrer">
-                  {user.info.website.substr(7, user.info.website.length - 1)}
+                  {user.info.website}
                 </Link>
               </Typography>
             )}

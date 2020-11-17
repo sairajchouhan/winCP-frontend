@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
 import { useHistory } from 'react-router-dom';
+import ButtonBase from '@material-ui/core/ButtonBase';
 
 import { selectUser } from '../redux/slices/authSlice';
 import TextField from '@material-ui/core/TextField';
@@ -17,6 +18,7 @@ import { loadUser } from '../redux/actions/authActions';
 import UpdateProfileSkeleton from '../components/skeletons/UpdateProfileSkeleton';
 import { setSnackbar } from '../redux/slices/snackbarSlice';
 import { ERROR, SUCCESS } from '../utils/constants';
+import ProgressBar from '../components/layout/ProgressBar';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
   },
+  img: {
+    borderRadius: '50%',
+    width: '200px',
+    objectFit: 'contain',
+  },
 }));
 
 const EditProfile = () => {
@@ -44,6 +51,21 @@ const EditProfile = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [image, setImage] = useState(null);
+  const [error, setError] = useState(null);
+
+  const types = ['image/png', 'image/jpeg'];
+
+  const imageChangeHandler = (e) => {
+    let selected = e.target.files[0];
+    if (selected && types.includes(selected.type)) {
+      setImage(selected);
+      setError(null);
+    } else {
+      setImage(null);
+      setSnackbar(dispatch, true, ERROR, 'Image upload failed');
+    }
+  };
   const [data, setData] = useState({
     username: user?.info.username,
     bio: user?.info.bio,
@@ -84,6 +106,8 @@ const EditProfile = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+  console.log(user.info.profileImgUrl);
 
   return (
     <Container className={classes.container} maxWidth="md">
@@ -144,8 +168,45 @@ const EditProfile = () => {
               </Button>
             </form>
           </Grid>
-          <Grid item xs={6} container alignItems="center" direction="column">
-            <Grid item></Grid>
+          <Grid
+            item
+            xs={6}
+            container
+            alignItems="center"
+            direction="column"
+            justify="space-around"
+          >
+            <Grid item>
+              <ButtonBase className={classes.image}>
+                <img
+                  className={classes.img}
+                  alt="complex"
+                  src={user.info.profileImgUrl}
+                />
+              </ButtonBase>
+            </Grid>
+            <Grid item>
+              <label htmlFor="upload-photo">
+                <input
+                  style={{ display: 'none' }}
+                  id="upload-photo"
+                  name="upload-photo"
+                  type="file"
+                  onChange={imageChangeHandler}
+                />
+                <Button color="secondary" variant="outlined" component="span">
+                  Upload Image
+                </Button>
+              </label>
+            </Grid>
+            <Grid item className={classes.img}>
+              {error && (
+                <Typography variant="h1" color="error">
+                  {error}
+                </Typography>
+              )}
+              {image && <ProgressBar image={image} setImage={setImage} />}
+            </Grid>
           </Grid>
         </Grid>
       </Paper>

@@ -6,9 +6,8 @@ const useStorage = (file) => {
   const [error, setError] = useState(null);
   const [url, setUrl] = useState(null);
   useEffect(() => {
-    // references
-    const storageRef = storage.ref(file.name);
-    const collectionRef = db.collection('images');
+    const storageRef = storage.ref(`profileImages/${file.name}`);
+    const collectionRef = db.collection('users');
 
     storageRef.put(file).on(
       'state_changed',

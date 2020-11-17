@@ -6,7 +6,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectIsAuthenticated } from '../../redux/slices/authSlice';
+import {
+  selectIsAuthenticated,
+  selectUser,
+} from '../../redux/slices/authSlice';
 import AddIcon from '@material-ui/icons/Add';
 import { logoutUser } from '../../redux/actions/authActions';
 import Container from '@material-ui/core/Container';
@@ -50,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = () => {
   const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -166,7 +170,7 @@ const Navbar = () => {
                   <Avatar
                     className={classes.avatar}
                     alt="Remy Sharp"
-                    src="https://material-ui.com/static/images/avatar/2.jpg"
+                    src={user?.info?.profileImgUrl}
                   />
                 </Button>
                 <Menu

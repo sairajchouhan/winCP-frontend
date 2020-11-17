@@ -50,6 +50,7 @@ const Home = () => {
             commentsCount={eachWin.commentsCount}
             key={eachWin.id}
             winId={eachWin.id}
+            profileImgUrl={eachWin.profileImgUrl}
           />
         ))}
     </Container>

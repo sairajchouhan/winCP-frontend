@@ -28,9 +28,7 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  avatar: {
-    backgroundColor: red[500],
-  },
+
   title: {
     cursor: 'pointer',
   },
@@ -44,6 +42,7 @@ const Win = ({
   likesCount,
   commentsCount,
   winId,
+  profileImgUrl,
 }) => {
   const classes = useStyles();
   const history = useHistory();
@@ -53,9 +52,11 @@ const Win = ({
       <Card className={classes.root}>
         <CardHeader
           avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              {username[0].toUpperCase()}
-            </Avatar>
+            <Avatar
+              aria-label="recipe"
+              className={classes.avatar}
+              src={profileImgUrl}
+            />
           }
           title={username}
           subheader={moment(createdAt).fromNow()}

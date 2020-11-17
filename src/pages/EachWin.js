@@ -23,7 +23,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
 import { useHistory } from 'react-router-dom';
 
-import { URL } from '../utils/constants';
+import { SUCCESS, URL, ERROR } from '../utils/constants';
 import LikeBtn from '../components/layout/LikeBtn';
 import CommentBtn from '../components/layout/CommentBtn';
 import WinSkeleton from '../components/skeletons/WinSkeleton';
@@ -32,6 +32,7 @@ import EachComment from '../components/layout/EachComment';
 import { selectUser } from '../redux/slices/authSlice';
 import { SET_LOADING_FALSE, SET_LOADING_TRUE } from '../redux/slices/winsSlice';
 import { deleteAWin } from '../redux/actions/winsActions';
+import { setSnackbar } from '../redux/slices/snackbarSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,9 +46,7 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  avatar: {
-    backgroundColor: 'red',
-  },
+
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
@@ -79,6 +78,9 @@ const EachWin = () => {
     dispatch(SET_LOADING_FALSE());
     if (!errorWhileDeleting) {
       history.push('/home');
+      setSnackbar(dispatch, true, SUCCESS, 'Win deleted successfully');
+    } else {
+      setSnackbar(dispatch, true, ERROR, 'Sonething went wrong');
     }
   };
   useEffect(() => {
@@ -102,9 +104,11 @@ const EachWin = () => {
         <Card className={classes.root}>
           <CardHeader
             avatar={
-              <Avatar aria-label="recipe" className={classes.avatar}>
-                S
-              </Avatar>
+              <Avatar
+                aria-label="recipe"
+                src={user.info.profileImgUrl}
+                className={classes.avatar}
+              />
             }
             action={
               user?.info?.username === data.username && (

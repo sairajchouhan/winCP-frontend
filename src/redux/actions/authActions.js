@@ -26,7 +26,7 @@ export const loginUser = (loginFormData) => async (dispatch) => {
     dispatch(LOGIN_SUCCESS(token));
     dispatch(loadUser());
   } catch (err) {
-    dispatch(LOGIN_FAIL(err.response.data.errors));
+    dispatch(LOGIN_FAIL(err?.response?.data?.errors));
   }
   dispatch(SET_LOADING_FALSE());
 };
@@ -40,7 +40,7 @@ export const signupUser = (signupFormData) => async (dispatch) => {
     dispatch(loadUser());
   } catch (err) {
     console.log('in catch block ');
-    dispatch(SIGNUP_FAIL(err.response.data.errors));
+    dispatch(SIGNUP_FAIL(err?.response?.data.errors));
   }
   dispatch(SET_LOADING_FALSE());
 };

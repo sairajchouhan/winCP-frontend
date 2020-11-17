@@ -49,8 +49,6 @@ const CreatePost = () => {
   const [data, setData] = useState({ body: '', title: '' });
   const [errors, setErrors] = useState({});
   const handleChange = (e) => {
-    console.log('inside of handle change');
-
     setData({
       ...data,
       [e.target.name]: e.target.value,
