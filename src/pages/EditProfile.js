@@ -89,7 +89,7 @@ const EditProfile = () => {
           <Grid item xs={12}>
             <Typography variant="h4">Edit Profile</Typography>
           </Grid>
-          <Grid item xs={12} className={classes.formContainer}>
+          <Grid item xs={6} className={classes.formContainer}>
             <form onSubmit={handleSubmit}>
               <TextField
                 id="standard-read-only-input-email"
@@ -140,6 +140,9 @@ const EditProfile = () => {
                 Submit
               </Button>
             </form>
+          </Grid>
+          <Grid item xs={6} container alignItems="center" direction="column">
+            <Grid item></Grid>
           </Grid>
         </Grid>
       </Paper>

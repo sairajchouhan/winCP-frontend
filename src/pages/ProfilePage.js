@@ -1,12 +1,6 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Card from '@material-ui/core/Card';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -17,8 +11,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import moment from 'moment';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-
-import Button from '@material-ui/core/Button';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -101,6 +93,7 @@ const ProfilePage = () => {
                 className={classes.img}
                 alt="complex"
                 src="https://material-ui.com/static/images/avatar/2.jpg"
+                onLoad={() => console.log('Image Loading')}
               />
             </ButtonBase>
           </Grid>
