@@ -14,6 +14,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { editUserProfile } from '../redux/actions/userActions';
 import { loadUser } from '../redux/actions/authActions';
+import UpdateProfileSkeleton from '../components/skeletons/UpdateProfileSkeleton';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -58,9 +59,8 @@ const EditProfile = () => {
   }, [user]);
 
   if (!user) {
-    return <h1>Inka time undhi </h1>;
+    return <UpdateProfileSkeleton />;
   }
-  console.log('Loading is', loading);
 
   const handleSubmit = async (e) => {
     setLoading((loading) => !loading);
