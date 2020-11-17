@@ -15,6 +15,7 @@ import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
 import CreateWin from './pages/CreateWin';
 import EachWin from './pages/EachWin';
+import EditProfile from './pages/EditProfile';
 
 // import { selectLoading } from './redux/slices/authSlice';
 
@@ -32,6 +33,7 @@ const theme = createMuiTheme({});
 
 function App() {
   // const classes = useStyles();
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadUser());
@@ -45,6 +47,7 @@ function App() {
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/signup" component={SignupPage} />
           <PrivateRoute exact path="/profile" component={ProfilePage} />
+          <PrivateRoute exact path="/profile/edit" component={EditProfile} />
           <PrivateRoute exact path="/home" component={HomePage} />
           <PrivateRoute exact path="/create-post" component={CreateWin} />
           <PrivateRoute exact path="/win/:winId" component={EachWin} />

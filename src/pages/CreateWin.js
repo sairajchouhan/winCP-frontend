@@ -7,17 +7,12 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-
 import TextField from '@material-ui/core/TextField';
 import { createWin } from '../redux/actions/winsActions';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { storage } from '../firebase/config';
 
 import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../redux/slices/winsSlice';
-import ProgressBar from '../components/layout/ProgressBar';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -62,7 +57,6 @@ const CreatePost = () => {
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-
     dispatch(SET_LOADING_TRUE());
     const resErrors = await createWin(data);
     setErrors({ ...resErrors });
@@ -71,7 +65,6 @@ const CreatePost = () => {
       history.push('/home');
     }
   };
-  console.log(errors);
   return (
     <Container className={classes.container} maxWidth="md">
       <Paper className={classes.paper} elevation={3}>
