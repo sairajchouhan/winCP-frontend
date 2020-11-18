@@ -11,6 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import { createWin } from '../redux/actions/winsActions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { DropzoneArea } from 'material-ui-dropzone';
 
 import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../redux/slices/winsSlice';
 import { ERROR, SUCCESS } from '../utils/constants';
@@ -46,6 +47,7 @@ const CreatePost = () => {
   const history = useHistory();
   const loading = useSelector((state) => state.wins.loading);
 
+  const [files, setFiles] = useState({ files: [] });
   const [data, setData] = useState({ body: '', title: '' });
   const [errors, setErrors] = useState({});
   const handleChange = (e) => {
@@ -55,6 +57,12 @@ const CreatePost = () => {
     });
   };
 
+  const handleImageChange = (files) => {
+    setFiles({
+      files,
+    });
+  };
+  console.log(files);
   const handlePostSubmit = async (e) => {
     e.preventDefault();
     dispatch(SET_LOADING_TRUE());
@@ -88,7 +96,7 @@ const CreatePost = () => {
                 helperText={errors?.title}
                 className={classes.title}
                 onChange={handleChange}
-                variant="filled"
+                variant="outlined"
                 margin="normal"
                 required
                 fullWidth
@@ -105,7 +113,7 @@ const CreatePost = () => {
                 className={classes.body}
                 multiline={true}
                 rows={10}
-                variant="filled"
+                variant="outlined"
                 margin="normal"
                 required
                 fullWidth
@@ -114,25 +122,20 @@ const CreatePost = () => {
                 name="body"
               />
 
-              <Grid container justify="space-between">
-                <Grid item>
-                  <label htmlFor="upload-photo">
-                    <input
-                      style={{ display: 'none' }}
-                      id="upload-photo"
-                      name="upload-photo"
-                      type="file"
-                    />
-                    <Button
-                      color="secondary"
-                      variant="outlined"
-                      component="span"
-                    >
-                      Upload Image
-                    </Button>
-                  </label>
+              <Grid
+                container
+                justify="space-between"
+                style={{ marginTop: '1em' }}
+              >
+                <Grid item xs={12}>
+                  <DropzoneArea onChange={handleImageChange} />
                 </Grid>
-                <Button type="submit" variant="outlined" color="primary">
+                <Button
+                  type="submit"
+                  variant="outlined"
+                  color="secondary"
+                  style={{ marginTop: '1em', marginLeft: 'auto' }}
+                >
                   Submit
                 </Button>
               </Grid>
