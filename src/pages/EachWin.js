@@ -95,7 +95,7 @@ const EachWin = () => {
     }
     getAWin();
   }, [winId]);
-  if (data === null) {
+  if (data === null || !user) {
     return <WinSkeleton />;
   }
   return (
