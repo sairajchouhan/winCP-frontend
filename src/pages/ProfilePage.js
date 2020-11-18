@@ -15,6 +15,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { selectUser } from '../redux/slices/authSlice';
+import ImageComp from '../components/utils/ImageComp';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,7 +31,12 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   gridTwo: {
-    marginTop: theme.spacing(0),
+    marginTop: theme.spacing(2),
+    padding: theme.spacing(2),
+  },
+  large: {
+    width: '200px',
+    height: '200px',
   },
 }));
 
@@ -85,20 +91,10 @@ const ProfilePage = () => {
         <Grid
           container
           className={classes.gridTwo}
-          gap={5}
           alignItems="center"
-          spacing={5}
+          justify="space-around"
         >
-          <Grid item container lg={4} xs={12} justify="center">
-            <ButtonBase className={classes.image}>
-              <img
-                className={classes.img}
-                alt="complex"
-                src={user?.info.profileImgUrl}
-              />
-            </ButtonBase>
-          </Grid>
-          <Grid container item xs={12} lg={8} direction="column">
+          <Grid item direction="column">
             <Typography gutterBottom variant="h5">
               {user.info.username}
             </Typography>
@@ -125,6 +121,11 @@ const ProfilePage = () => {
                 </Link>
               </Typography>
             )}
+          </Grid>
+          <Grid item justify="center" alignItems="center">
+            <ButtonBase>
+              <ImageComp w={250} h={250} src={user.info.profileImgUrl} />
+            </ButtonBase>
           </Grid>
         </Grid>
       </Paper>

@@ -19,6 +19,7 @@ import UpdateProfileSkeleton from '../components/skeletons/UpdateProfileSkeleton
 import { setSnackbar } from '../redux/slices/snackbarSlice';
 import { ERROR, SUCCESS } from '../utils/constants';
 import ProgressBar from '../components/layout/ProgressBar';
+import ImageComp from '../components/utils/ImageComp';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -178,11 +179,7 @@ const EditProfile = () => {
           >
             <Grid item>
               <ButtonBase className={classes.image}>
-                <img
-                  className={classes.img}
-                  alt="complex"
-                  src={user.info.profileImgUrl}
-                />
+                <ImageComp w={250} h={250} src={user.info.profileImgUrl} />
               </ButtonBase>
             </Grid>
             <Grid item>
