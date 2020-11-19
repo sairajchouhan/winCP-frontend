@@ -15,7 +15,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { selectUser } from '../redux/slices/authSlice';
-import ImageComp from '../components/utils/ImageComp';
+import ImageComp from '../components/layout/ImageComp';
 
 const useStyles = makeStyles((theme) => ({
   container: {

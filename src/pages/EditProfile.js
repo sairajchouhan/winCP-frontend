@@ -19,7 +19,7 @@ import UpdateProfileSkeleton from '../components/skeletons/UpdateProfileSkeleton
 import { setSnackbar } from '../redux/slices/snackbarSlice';
 import { ERROR, SUCCESS } from '../utils/constants';
 import ProgressBar from '../components/layout/ProgressBar';
-import ImageComp from '../components/utils/ImageComp';
+import ImageComp from '../components/layout/ImageComp';
 
 const useStyles = makeStyles((theme) => ({
   container: {
