@@ -16,6 +16,7 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../redux/slices/winsSlice';
 import { ERROR, SUCCESS } from '../utils/constants';
 import { setSnackbar } from '../redux/slices/snackbarSlice';
+import { uploadPostImagesToFirebase } from '../redux/actions/postImageUploadActions';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -67,21 +68,23 @@ const CreatePost = () => {
     e.preventDefault();
     dispatch(SET_LOADING_TRUE());
     const resErrors = await createWin(data);
+    console.log(resErrors);
     setErrors({ ...resErrors });
     dispatch(SET_LOADING_FALSE());
     if (!resErrors) {
-      history.push('/home');
+      uploadPostImagesToFirebase(files);
+      await history.push('/home');
       setSnackbar(dispatch, true, SUCCESS, 'Win created successfully');
     } else {
       setSnackbar(dispatch, true, ERROR, 'Something went wrong');
     }
   };
   return (
-    <Container className={classes.container} maxWidth="md">
+    <Container className={classes.container} maxWidth='md'>
       <Paper className={classes.paper} elevation={3}>
         <Grid container>
           <Grid item>
-            <Typography variant="h4">Create Win</Typography>
+            <Typography variant='h4'>Create Win</Typography>
           </Grid>
 
           <Grid container item xs={12}>
@@ -96,13 +99,13 @@ const CreatePost = () => {
                 helperText={errors?.title}
                 className={classes.title}
                 onChange={handleChange}
-                variant="outlined"
-                margin="normal"
+                variant='outlined'
+                margin='normal'
                 required
                 fullWidth
-                id="title"
-                label="Title of the win"
-                name="title"
+                id='title'
+                label='Title of the win'
+                name='title'
               />
 
               <TextField
@@ -113,27 +116,27 @@ const CreatePost = () => {
                 className={classes.body}
                 multiline={true}
                 rows={10}
-                variant="outlined"
-                margin="normal"
+                variant='outlined'
+                margin='normal'
                 required
                 fullWidth
-                id="body"
-                label="Body of the win"
-                name="body"
+                id='body'
+                label='Body of the win'
+                name='body'
               />
 
               <Grid
                 container
-                justify="space-between"
+                justify='space-between'
                 style={{ marginTop: '1em' }}
               >
                 <Grid item xs={12}>
                   <DropzoneArea onChange={handleImageChange} />
                 </Grid>
                 <Button
-                  type="submit"
-                  variant="outlined"
-                  color="secondary"
+                  type='submit'
+                  variant='outlined'
+                  color='secondary'
                   style={{ marginTop: '1em', marginLeft: 'auto' }}
                 >
                   Submit
@@ -145,7 +148,7 @@ const CreatePost = () => {
       </Paper>
       {loading && (
         <Backdrop className={classes.backdrop} open={true}>
-          <CircularProgress color="inherit" />
+          <CircularProgress color='inherit' />
         </Backdrop>
       )}
     </Container>

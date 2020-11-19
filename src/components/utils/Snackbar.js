@@ -31,7 +31,6 @@ const CustomizedSnackbars = () => {
       SET_SNACKBAR({ snackbarOpen: false, snackbarType, snackbarMessage })
     );
   };
-  console.log(snackbar);
   return (
     <div className={classes.root}>
       <Snackbar
@@ -41,7 +40,7 @@ const CustomizedSnackbars = () => {
       >
         <Alert
           elevation={6}
-          variant="filled"
+          variant='filled'
           onClose={handleClose}
           color={snackbarType}
           severity={snackbarType}

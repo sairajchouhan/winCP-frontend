@@ -80,7 +80,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   if (isAuthenticated) {
-    return <Redirect to="/home" />;
+    return <Redirect to='/home' />;
   }
 
   const handleClickShowPassword = () => {
@@ -106,29 +106,29 @@ export default function Login() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component='main' maxWidth='xs'>
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component='h1' variant='h5'>
           Log In
         </Typography>
         <form className={classes.form} noValidate onSubmit={handleLoginSubmit}>
           <TextField
             value={logInFormData.email}
             onChange={handleChange}
-            error={errors.email ? true : false}
-            helperText={errors.email ? errors.email : null}
-            variant="outlined"
-            margin="normal"
+            error={errors?.email ? true : false}
+            helperText={errors?.email ? errors.email : null}
+            variant='outlined'
+            margin='normal'
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
+            id='email'
+            label='Email Address'
+            name='email'
+            autoComplete='email'
             autoFocus
           />
           <TextField
@@ -136,23 +136,23 @@ export default function Login() {
             onChange={handleChange}
             error={errors.password ? true : false}
             helperText={errors.password ? errors.password : null}
-            variant="outlined"
-            margin="normal"
+            variant='outlined'
+            margin='normal'
             required
             fullWidth
-            name="password"
-            label="Password"
+            name='password'
+            label='Password'
             type={showPassword ? 'text' : 'password'}
-            id="password"
-            autoComplete="current-password"
+            id='password'
+            autoComplete='current-password'
             InputProps={{
               endAdornment: (
-                <InputAdornment position="end">
+                <InputAdornment position='end'>
                   <IconButton
-                    aria-label="toggle password visibility"
+                    aria-label='toggle password visibility'
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
-                    edge="end"
+                    edge='end'
                   >
                     {showPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
@@ -161,26 +161,26 @@ export default function Login() {
             }}
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            control={<Checkbox value='remember' color='primary' />}
+            label='Remember me'
           />
           <Button
-            type="submit"
+            type='submit'
             fullWidth
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             className={classes.submit}
           >
             LogIn
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link to="/" variant="body2">
+              <Link to='/' variant='body2'>
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/signup" variant="body2">
+              <Link to='/signup' variant='body2'>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
@@ -190,7 +190,7 @@ export default function Login() {
 
       {loading && (
         <Backdrop className={classes.backdrop} open={true}>
-          <CircularProgress color="inherit" />
+          <CircularProgress color='inherit' />
         </Backdrop>
       )}
     </Container>
