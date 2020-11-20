@@ -27,7 +27,7 @@ import {
   selectIsAuthenticated,
 } from '../redux/slices/authSlice';
 import { setSnackbar } from '../redux/slices/snackbarSlice';
-import { SUCCESS } from '../utils/constants';
+import { ERROR, SUCCESS } from '../utils/constants';
 
 // function Copyright() {
 //   return (
@@ -93,9 +93,11 @@ export default function Login() {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
-    await dispatch(loginUser(logInFormData));
-    history.push('/home');
-    setSnackbar(dispatch, true, SUCCESS, 'Successfully logged in');
+    const response = await dispatch(loginUser(logInFormData));
+    if (response) {
+      history.push('/home');
+      setSnackbar(dispatch, true, SUCCESS, 'Successfully logged in');
+    }
   };
 
   const handleChange = (e) => {
@@ -134,8 +136,8 @@ export default function Login() {
           <TextField
             value={logInFormData.password}
             onChange={handleChange}
-            error={errors.password ? true : false}
-            helperText={errors.password ? errors.password : null}
+            error={errors?.password ? true : false}
+            helperText={errors?.password ? errors.password : null}
             variant='outlined'
             margin='normal'
             required

@@ -108,63 +108,61 @@ const EditProfile = () => {
     });
   };
 
-  console.log(user.info.profileImgUrl);
-
   return (
-    <Container className={classes.container} maxWidth="md">
+    <Container className={classes.container} maxWidth='md'>
       <Paper className={classes.paper} elevation={3}>
         <Grid container>
           <Grid item xs={12}>
-            <Typography variant="h4">Edit Profile</Typography>
+            <Typography variant='h4'>Edit Profile</Typography>
           </Grid>
           <Grid item xs={6} className={classes.formContainer}>
             <form onSubmit={handleSubmit}>
               <TextField
-                id="standard-read-only-input-email"
-                label="Email"
+                id='standard-read-only-input-email'
+                label='Email'
                 className={classes.field}
                 defaultValue={user.info.email}
                 fullWidth={true}
                 disabled={true}
               />
               <TextField
-                id="standard-read-only-input-username"
-                label="Username"
+                id='standard-read-only-input-username'
+                label='Username'
                 className={classes.field}
                 value={data.username}
                 onChange={handleChange}
                 fullWidth={true}
-                name="username"
+                name='username'
               />
               <TextField
-                id="standard-read-only-input-bio"
-                label="Bio"
+                id='standard-read-only-input-bio'
+                label='Bio'
                 className={classes.field}
                 value={data.bio}
                 onChange={handleChange}
                 fullWidth={true}
-                name="bio"
+                name='bio'
               />
               <TextField
-                id="standard-read-only-input-location"
-                label="Location"
+                id='standard-read-only-input-location'
+                label='Location'
                 className={classes.field}
                 value={data.location}
                 onChange={handleChange}
                 fullWidth={true}
-                name="location"
+                name='location'
               />
               <TextField
-                id="standard-read-only-input-website"
-                label="Website"
+                id='standard-read-only-input-website'
+                label='Website'
                 className={classes.field}
                 value={data.website}
                 onChange={handleChange}
                 fullWidth={true}
-                name="website"
-                helperText="Include http:// or https:// before your website "
+                name='website'
+                helperText='Include http:// or https:// before your website '
               />
-              <Button type="submit" variant="outlined" color="secondary">
+              <Button type='submit' variant='outlined' color='secondary'>
                 Submit
               </Button>
             </form>
@@ -173,9 +171,9 @@ const EditProfile = () => {
             item
             xs={6}
             container
-            alignItems="center"
-            direction="column"
-            justify="space-around"
+            alignItems='center'
+            direction='column'
+            justify='space-around'
           >
             <Grid item>
               <ButtonBase className={classes.image}>
@@ -183,22 +181,22 @@ const EditProfile = () => {
               </ButtonBase>
             </Grid>
             <Grid item>
-              <label htmlFor="upload-photo">
+              <label htmlFor='upload-photo'>
                 <input
                   style={{ display: 'none' }}
-                  id="upload-photo"
-                  name="upload-photo"
-                  type="file"
+                  id='upload-photo'
+                  name='upload-photo'
+                  type='file'
                   onChange={imageChangeHandler}
                 />
-                <Button color="secondary" variant="outlined" component="span">
+                <Button color='secondary' variant='outlined' component='span'>
                   Upload Image
                 </Button>
               </label>
             </Grid>
             <Grid item className={classes.img}>
               {error && (
-                <Typography variant="h1" color="error">
+                <Typography variant='h1' color='error'>
                   {error}
                 </Typography>
               )}
@@ -209,7 +207,7 @@ const EditProfile = () => {
       </Paper>
       {loading && (
         <Backdrop className={classes.backdrop} open={true}>
-          <CircularProgress color="inherit" />
+          <CircularProgress color='inherit' />
         </Backdrop>
       )}
     </Container>

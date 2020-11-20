@@ -25,10 +25,13 @@ export const loginUser = (loginFormData) => async (dispatch) => {
     if (token) localStorage.setItem('token', token);
     dispatch(LOGIN_SUCCESS(token));
     dispatch(loadUser());
+    dispatch(SET_LOADING_FALSE());
+    return true;
   } catch (err) {
     dispatch(LOGIN_FAIL(err?.response?.data?.errors));
+    dispatch(SET_LOADING_FALSE());
+    return false;
   }
-  dispatch(SET_LOADING_FALSE());
 };
 
 export const signupUser = (signupFormData) => async (dispatch) => {

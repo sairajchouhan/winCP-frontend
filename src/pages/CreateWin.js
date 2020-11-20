@@ -16,7 +16,10 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../redux/slices/winsSlice';
 import { ERROR, SUCCESS } from '../utils/constants';
 import { setSnackbar } from '../redux/slices/snackbarSlice';
-import { uploadPostImagesToFirebase } from '../redux/actions/postImageUploadActions';
+import {
+  uploadPostImagesToFirebase,
+  savePostImageUrlsToFirestore,
+} from '../redux/actions/postImageUploadActions';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -47,6 +50,7 @@ const CreatePost = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const loading = useSelector((state) => state.wins.loading);
+  const user = useSelector((state) => state.auth.user);
 
   const [files, setFiles] = useState({ files: [] });
   const [data, setData] = useState({ body: '', title: '' });
@@ -63,22 +67,37 @@ const CreatePost = () => {
       files,
     });
   };
-  console.log(files);
+
   const handlePostSubmit = async (e) => {
     e.preventDefault();
     dispatch(SET_LOADING_TRUE());
-    const resErrors = await createWin(data);
-    console.log(resErrors);
-    setErrors({ ...resErrors });
+    const response = await createWin(data);
     dispatch(SET_LOADING_FALSE());
-    if (!resErrors) {
-      uploadPostImagesToFirebase(files);
-      await history.push('/home');
-      setSnackbar(dispatch, true, SUCCESS, 'Win created successfully');
+    if (!response.hasError) {
+      try {
+        const urls = await uploadPostImagesToFirebase(
+          files.files,
+          user.info.username
+        );
+        await savePostImageUrlsToFirestore(urls, response.winId);
+        console.log(urls);
+        history.push('/home');
+        setSnackbar(dispatch, true, SUCCESS, 'Win created successfully');
+      } catch (err) {
+        setSnackbar(dispatch, true, ERROR, 'Something went wrong');
+        console.log(err);
+      }
+
+      setFiles({ files: [] });
     } else {
+      setErrors({ ...errors, ...response.errors });
       setSnackbar(dispatch, true, ERROR, 'Something went wrong');
     }
   };
+
+  if (!user) {
+    return <h1>Loading ra machas</h1>;
+  }
   return (
     <Container className={classes.container} maxWidth='md'>
       <Paper className={classes.paper} elevation={3}>

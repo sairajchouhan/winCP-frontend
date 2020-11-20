@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
-  const snackbar = useSelector((state) => state.snackbar);
   const dispatch = useDispatch();
   const wins = useSelector((state) => state.wins.allWins);
 
@@ -30,8 +29,6 @@ const Home = () => {
     }
     callThis();
   }, [dispatch]);
-
-  console.log(snackbar);
 
   if (wins === null || wins === undefined) {
     return <WinSkeleton />;

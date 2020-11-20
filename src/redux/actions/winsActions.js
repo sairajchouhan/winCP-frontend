@@ -48,10 +48,10 @@ export const getAllWins = () => async (dispatch) => {
 export const createWin = async (data) => {
   try {
     const res = await axios.post(`${URL}/wins`, data);
-    console.log(res.data);
+    return { hasError: false, winId: res.data.winId };
   } catch (err) {
     console.log('error in posting a new Post');
-    return err.response.data.errors;
+    return { hasError: true, errors: err.response.data.errors };
   }
 };
 
