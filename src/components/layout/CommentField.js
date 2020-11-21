@@ -24,8 +24,10 @@ const useStyles = makeStyles((theme) => ({
 const Comment = ({ showComment, winId, setData }) => {
   const classes = useStyles();
   const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleCommentSubmit = async (e) => {
+    setLoading((loading) => !loading);
     e.preventDefault();
     console.log('submited');
     try {
@@ -38,25 +40,27 @@ const Comment = ({ showComment, winId, setData }) => {
       console.log('error in posting the comment');
     }
     setComment('');
+    setLoading((loading) => !loading);
   };
 
   return (
     <CardActions>
-      <Grid container justify="center">
+      <Grid container justify='center'>
         <Grid item className={classes.commentGridItem}>
-          <Collapse in={showComment} timeout="auto" unmountOnExit>
+          <Collapse in={showComment} timeout='auto' unmountOnExit>
             <form onSubmit={handleCommentSubmit}>
               <TextField
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 className={classes.comment}
-                label="Comment"
+                label='Comment'
                 fullWidth={true}
+                disabled={loading}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="start">
+                    <InputAdornment position='start'>
                       <IconButton>
-                        <SendIcon onClick={handleCommentSubmit} />
+                        <SendIcon onClick={!loading && handleCommentSubmit} />
                       </IconButton>
                     </InputAdornment>
                   ),

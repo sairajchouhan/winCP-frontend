@@ -12,7 +12,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import { useParams } from 'react-router-dom';
@@ -87,6 +86,7 @@ const EachWin = () => {
     async function getAWin() {
       try {
         const res = await axios.get(`${URL}/win/${winId}`);
+        console.log(res);
         setData(res.data);
         console.log(res.data);
       } catch (error) {
@@ -105,8 +105,8 @@ const EachWin = () => {
           <CardHeader
             avatar={
               <Avatar
-                aria-label="recipe"
-                src={user.info.profileImgUrl}
+                aria-label='recipe'
+                src={data.profileImgUrl}
                 className={classes.avatar}
               />
             }
@@ -114,15 +114,15 @@ const EachWin = () => {
               user?.info?.username === data.username && (
                 <>
                   <IconButton
-                    aria-label="settings"
-                    aria-controls="simple-menu"
-                    aria-haspopup="true"
+                    aria-label='settings'
+                    aria-controls='simple-menu'
+                    aria-haspopup='true'
                     onClick={handleClick}
                   >
                     <MoreVertIcon />
                   </IconButton>
                   <Menu
-                    id="simple-menu"
+                    id='simple-menu'
                     anchorEl={anchorEl}
                     keepMounted
                     open={Boolean(anchorEl)}
@@ -138,16 +138,12 @@ const EachWin = () => {
             title={data.username}
             subheader={moment(data?.createdAt).fromNow()}
           />
-          <CardMedia
-            className={classes.media}
-            image="https://images.unsplash.com/photo-1595835018346-5f8fb50fa837?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-            title="sample"
-          />
+
           <CardContent>
-            <Typography variant="h6" color="black" component="p">
+            <Typography variant='h6' color='black' component='p'>
               {data.title}
             </Typography>
-            <Typography variant="body1" color="textSecondary" component="p">
+            <Typography variant='body1' color='textSecondary' component='p'>
               {data.body}
             </Typography>
           </CardContent>
@@ -170,7 +166,7 @@ const EachWin = () => {
       </Paper>
       {loading && (
         <Backdrop className={classes.backdrop} open={true}>
-          <CircularProgress color="inherit" />
+          <CircularProgress color='inherit' />
         </Backdrop>
       )}
     </Container>
