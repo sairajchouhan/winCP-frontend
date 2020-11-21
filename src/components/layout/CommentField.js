@@ -5,10 +5,13 @@ import Collapse from '@material-ui/core/Collapse';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core';
 import axios from 'axios';
-import { URL } from '../../utils/constants';
+import { ERROR, URL } from '../../utils/constants';
+import { useDispatch } from 'react-redux';
+import { setSnackbar } from '../../redux/slices/snackbarSlice';
 
 const useStyles = makeStyles((theme) => ({
   comment: {
@@ -18,11 +21,23 @@ const useStyles = makeStyles((theme) => ({
   },
   commentGridItem: {
     width: '90%',
+    position: 'relative',
+  },
+  commentLoading: {
+    position: 'absolute',
+    top: -35,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));
 
 const Comment = ({ showComment, winId, setData }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -37,7 +52,7 @@ const Comment = ({ showComment, winId, setData }) => {
       const refetch = await axios.get(`${URL}/win/${winId}`);
       setData(refetch.data);
     } catch (err) {
-      console.log('error in posting the comment');
+      setSnackbar(dispatch, true, ERROR, 'something went wrong');
     }
     setComment('');
     setLoading((loading) => !loading);
@@ -68,6 +83,11 @@ const Comment = ({ showComment, winId, setData }) => {
               />
             </form>
           </Collapse>
+          {loading && (
+            <div className={classes.commentLoading}>
+              <CircularProgress />
+            </div>
+          )}
         </Grid>
       </Grid>
     </CardActions>
