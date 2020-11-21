@@ -18,7 +18,7 @@ export const loginUser = (loginFormData) => async (dispatch) => {
   dispatch(SET_LOADING_TRUE());
   try {
     const res = await axios.post(
-      `http://localhost:5001/wincp-9d49a/us-central1/api/login`,
+      `${URL}/login`,
       loginFormData
     );
     const token = res.data.token;

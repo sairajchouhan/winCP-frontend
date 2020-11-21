@@ -97,6 +97,8 @@ export default function Login() {
     if (response) {
       history.push('/home');
       setSnackbar(dispatch, true, SUCCESS, 'Successfully logged in');
+    } else {
+      setSnackbar(dispatch, true, ERROR, 'Login failed');
     }
   };
 
