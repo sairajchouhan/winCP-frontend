@@ -13,6 +13,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import CardActions from '@material-ui/core/CardActions';
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -47,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
+    zIndex: theme.zIndex.drawer + 99999,
     color: '#fff',
   },
 }));
@@ -61,7 +67,16 @@ const EachWin = () => {
   const dispatch = useDispatch();
 
   const [data, setData] = useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpenAlert = () => {
+    setOpen((open) => !open);
+  };
+
+  const handleCloseAlert = () => {
+    setOpen((open) => !open);
+  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -70,6 +85,7 @@ const EachWin = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   const handleDelete = async (winId) => {
     dispatch(SET_LOADING_TRUE());
     const errorWhileDeleting = await deleteAWin(winId);
@@ -81,6 +97,7 @@ const EachWin = () => {
     } else {
       setSnackbar(dispatch, true, ERROR, 'Sonething went wrong');
     }
+    handleCloseAlert();
   };
   useEffect(() => {
     async function getAWin() {
@@ -128,9 +145,38 @@ const EachWin = () => {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={() => handleDelete(data.winId)}>
+                    <MenuItem onClick={handleClickOpenAlert}>
                       Delete Win
                     </MenuItem>
+
+                    <Dialog
+                      open={open}
+                      onClose={handleCloseAlert}
+                      aria-labelledby='alert-dialog-title'
+                      aria-describedby='alert-dialog-description'
+                    >
+                      <DialogTitle id='alert-dialog-title'>
+                        {'Are you sure you want to delete this win ?'}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id='alert-dialog-description'>
+                          All the images, likes and comments realated to the win
+                          will be delted
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleCloseAlert} color='primary'>
+                          Disagree
+                        </Button>
+                        <Button
+                          onClick={() => handleDelete(data.winId)}
+                          color='secondary'
+                          autoFocus
+                        >
+                          Agree
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                   </Menu>
                 </>
               )

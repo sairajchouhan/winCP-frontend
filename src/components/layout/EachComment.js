@@ -5,9 +5,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios';
 import { ERROR, URL } from '../../utils/constants';
 import { useSelector } from 'react-redux';
@@ -51,15 +49,7 @@ const EachComment = ({
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleDeleteComment = async () => {
     setLoading((loading) => !loading);
@@ -73,7 +63,6 @@ const EachComment = ({
       setSnackbar(dispatch, true, ERROR, 'cannot post the comment');
     }
     setLoading((loading) => !loading);
-    handleClose();
   };
 
   return (
@@ -98,24 +87,13 @@ const EachComment = ({
             </Grid>
             <Grid item justify='flex-end' className={classes.threeDotIcon}>
               {user && user.info.username === username && (
-                <>
-                  <IconButton
-                    aria-controls='comments-options-menu'
-                    aria-haspopup='true'
-                    onClick={handleClick}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu
-                    id='simple-menu'
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={handleDeleteComment}>Delete </MenuItem>
-                  </Menu>
-                </>
+                <IconButton
+                  aria-controls='comments-options-menu'
+                  aria-haspopup='true'
+                  onClick={handleDeleteComment}
+                >
+                  <DeleteIcon />
+                </IconButton>
               )}
             </Grid>
           </Grid>
