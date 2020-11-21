@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -92,7 +92,7 @@ const Navbar = () => {
 
   const list = (anchor) => (
     <div
-      role="presentation"
+      role='presentation'
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
       className={classes.list}
@@ -120,14 +120,14 @@ const Navbar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Container>
           <Toolbar>
             <Typography
-              variant="h5"
+              variant='h5'
               component={Link}
               onClick={refetchPosts}
-              to="/home"
+              to='/home'
               className={classes.title}
             >
               winCP
@@ -136,19 +136,19 @@ const Navbar = () => {
               <></>
             ) : isAuthenticated === true ? (
               <>
-                <Tooltip title="Add" placement="bottom">
-                  <Button color="inherit" component={Link} to="/create-post">
+                <Tooltip title='Add' placement='bottom'>
+                  <Button color='inherit' component={Link} to='/create-post'>
                     <AddIcon />
                   </Button>
                 </Tooltip>
                 <>
-                  <Tooltip title="Notifications" placement="bottom">
+                  <Tooltip title='Notifications' placement='bottom'>
                     <Button
                       onClick={toggleDrawer(true)}
                       className={classes.button}
                     >
-                      <Badge badgeContent={4} color="secondary">
-                        <NotificationsIcon color="white" />
+                      <Badge badgeContent={4} color='secondary'>
+                        <NotificationsIcon color='white' />
                       </Badge>
                     </Button>
                   </Tooltip>
@@ -162,8 +162,8 @@ const Navbar = () => {
                 </>
 
                 <Button
-                  aria-controls="simple-menu"
-                  aria-haspopup="true"
+                  aria-controls='simple-menu'
+                  aria-haspopup='true'
                   onClick={handleClick}
                 >
                   <Avatar
@@ -172,7 +172,7 @@ const Navbar = () => {
                   />
                 </Button>
                 <Menu
-                  id="simple-menu"
+                  id='simple-menu'
                   anchorEl={anchorEl}
                   keepMounted
                   open={Boolean(anchorEl)}
@@ -181,23 +181,22 @@ const Navbar = () => {
                   <>
                     <MenuItem
                       component={Link}
-                      to="/profile"
+                      to='/profile'
                       onClick={handleClose}
                     >
                       Profile
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>My Wins</MenuItem>
                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                   </>
                 </Menu>
               </>
             ) : (
               <>
-                <Button component={Link} to="/login" color="inherit">
+                <Button component={Link} to='/login' color='inherit'>
                   Login
                 </Button>
 
-                <Button component={Link} to="/signup" color="inherit">
+                <Button component={Link} to='/signup' color='inherit'>
                   SignUp
                 </Button>
               </>
