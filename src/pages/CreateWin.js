@@ -16,10 +16,7 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import { SET_LOADING_TRUE, SET_LOADING_FALSE } from '../redux/slices/winsSlice';
 import { ERROR, SUCCESS } from '../utils/constants';
 import { setSnackbar } from '../redux/slices/snackbarSlice';
-import {
-  uploadPostImagesToFirebase,
-  savePostImageUrlsToFirestore,
-} from '../redux/actions/postImageUploadActions';
+import { uploadPostImagesToFirebase } from '../redux/actions/postImageUploadActions';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -74,21 +71,18 @@ const CreatePost = () => {
     const response = await createWin(data);
     dispatch(SET_LOADING_FALSE());
     if (!response.hasError) {
-      try {
-        const urls = await uploadPostImagesToFirebase(
-          files.files,
-          user.info.username
-        );
-        await savePostImageUrlsToFirestore(urls, response.winId);
-        console.log(urls);
-        history.push('/home');
+      const err = await uploadPostImagesToFirebase(
+        files.files,
+        user.info.username,
+        response.winId
+      );
+      if (!err) {
+        setFiles({ files: [] });
         setSnackbar(dispatch, true, SUCCESS, 'Win created successfully');
-      } catch (err) {
-        setSnackbar(dispatch, true, ERROR, 'Something went wrong');
-        console.log(err);
+        history.push('/home');
+      } else {
+        setSnackbar(dispatch, true, ERROR, 'Imags not uploaded, try again');
       }
-
-      setFiles({ files: [] });
     } else {
       setErrors({ ...errors, ...response.errors });
       setSnackbar(dispatch, true, ERROR, 'Something went wrong');
