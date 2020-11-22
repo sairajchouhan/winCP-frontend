@@ -1,34 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Paper from '@material-ui/core/Paper';
-
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
-import moment from 'moment';
-import Avatar from '@material-ui/core/Avatar';
+
 import Typography from '@material-ui/core/Typography';
-import CardHeader from '@material-ui/core/CardHeader';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
 import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useSelector, useDispatch } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
-import CardMedia from '@material-ui/core/CardMedia';
 import { useHistory } from 'react-router-dom';
 
 import { SUCCESS, URL, ERROR } from '../utils/constants';
@@ -41,6 +27,8 @@ import { selectUser } from '../redux/slices/authSlice';
 import { SET_LOADING_FALSE, SET_LOADING_TRUE } from '../redux/slices/winsSlice';
 import { deleteAWin } from '../redux/actions/winsActions';
 import { setSnackbar } from '../redux/slices/snackbarSlice';
+import Carousel from '../components/layout/Carousel';
+import EachWinHeader from '../components/layout/EachWinHeader';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,83 +47,15 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 99999,
     color: '#fff',
   },
-  imageCarousel: {
-    position: 'relative',
-  },
-  pre: {
-    position: 'absolute',
-    left: 0,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    zIndex: 99999,
-  },
-  next: {
-    position: 'absolute',
-    right: 0,
-    top: '50%',
-    transform: 'translateY(-50%)',
-    zIndex: 99999,
-  },
-  navigationButtons: {
-    fontSize: '2.5rem',
-  },
 }));
 
 const EachWin = () => {
-  const history = useHistory();
   const classes = useStyles();
   const { winId } = useParams();
   const loading = useSelector((state) => state.wins.loading);
   const user = useSelector(selectUser);
-  const dispatch = useDispatch();
 
   const [data, setData] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const handleClickOpenAlert = () => {
-    setOpen((open) => !open);
-  };
-
-  const handleCloseAlert = () => {
-    setOpen((open) => !open);
-  };
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDelete = async (winId) => {
-    dispatch(SET_LOADING_TRUE());
-    const errorWhileDeleting = await deleteAWin(winId);
-    setAnchorEl(null);
-    dispatch(SET_LOADING_FALSE());
-    if (!errorWhileDeleting) {
-      history.push('/home');
-      setSnackbar(dispatch, true, SUCCESS, 'Win deleted successfully');
-    } else {
-      setSnackbar(dispatch, true, ERROR, 'Sonething went wrong');
-    }
-    handleCloseAlert();
-  };
-
-  const showPreImg = () => {
-    const lastIndex = data?.postImageUrls.length - 1;
-    const shouldResetIndex = currentImageIndex === 0;
-    const index = shouldResetIndex ? lastIndex : currentImageIndex - 1;
-    setCurrentImageIndex(index);
-  };
-  const showNextImg = () => {
-    const lastIndex = data?.postImageUrls.length - 1;
-    const shouldResetIndex = currentImageIndex === lastIndex;
-    const index = shouldResetIndex ? 0 : currentImageIndex + 1;
-    setCurrentImageIndex(index);
-  };
 
   useEffect(() => {
     async function getAWin() {
@@ -151,95 +71,13 @@ const EachWin = () => {
   if (!data || !user) {
     return <WinSkeleton />;
   }
-
+  console.log(data);
   return (
     <Container className={classes.container}>
       <Paper>
         <Card className={classes.root}>
-          <CardHeader
-            avatar={
-              <Avatar
-                aria-label='recipe'
-                src={data.profileImgUrl}
-                className={classes.avatar}
-              />
-            }
-            action={
-              user?.info?.username === data.username && (
-                <>
-                  <IconButton
-                    aria-label='settings'
-                    aria-controls='simple-menu'
-                    aria-haspopup='true'
-                    onClick={handleClick}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu
-                    id='simple-menu'
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={handleClickOpenAlert}>
-                      Delete Win
-                    </MenuItem>
-
-                    <Dialog
-                      open={open}
-                      onClose={handleCloseAlert}
-                      aria-labelledby='alert-dialog-title'
-                      aria-describedby='alert-dialog-description'
-                    >
-                      <DialogTitle id='alert-dialog-title'>
-                        {'Are you sure you want to delete this win ?'}
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id='alert-dialog-description'>
-                          All the images, likes and comments realated to the win
-                          will be delted
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleCloseAlert} color='primary'>
-                          Disagree
-                        </Button>
-                        <Button
-                          onClick={() => handleDelete(data.winId)}
-                          color='secondary'
-                          autoFocus
-                        >
-                          Agree
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                  </Menu>
-                </>
-              )
-            }
-            title={data.username}
-            subheader={moment(data?.createdAt).fromNow()}
-          />
-
-          <div className={classes.imageCarousel}>
-            <div className={classes.pre}>
-              <IconButton onClick={showPreImg}>
-                <NavigateBeforeIcon className={classes.navigationButtons} />
-              </IconButton>
-            </div>
-            <CardMedia
-              className={classes.media}
-              image={data?.postImageUrls[currentImageIndex]}
-              title='Paella dish'
-            />
-            <div className={classes.next}>
-              <IconButton onClick={showNextImg}>
-                <NavigateNextIcon className={classes.navigationButtons} />
-              </IconButton>
-            </div>
-          </div>
-
+          <EachWinHeader data={data} user={user} />
+          <Carousel images={data.postImageUrls} />
           <CardContent>
             <Typography variant='h6' color='black' component='p'>
               {data.title}

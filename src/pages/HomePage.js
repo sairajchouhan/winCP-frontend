@@ -30,7 +30,7 @@ const Home = () => {
     callThis();
   }, [dispatch]);
 
-  if (wins === null || wins === undefined) {
+  if (!wins) {
     return <WinSkeleton />;
   }
 
