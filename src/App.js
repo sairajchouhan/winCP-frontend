@@ -16,6 +16,7 @@ import ProfilePage from './pages/ProfilePage';
 import CreateWin from './pages/CreateWin';
 import EachWin from './pages/EachWin';
 import EditProfile from './pages/EditProfile';
+import ResetPassword from './pages/ResetPassword';
 import Snackbar from './components/utils/Snackbar';
 
 if (localStorage.token) {
@@ -31,18 +32,19 @@ function App() {
   });
   return (
     <ThemeProvider theme={theme}>
-      <div className="app">
+      <div className='app'>
         <Snackbar />
         <Navbar />
         <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/signup" component={SignupPage} />
-          <PrivateRoute exact path="/profile" component={ProfilePage} />
-          <PrivateRoute exact path="/profile/edit" component={EditProfile} />
-          <PrivateRoute exact path="/home" component={HomePage} />
-          <PrivateRoute exact path="/create-post" component={CreateWin} />
-          <PrivateRoute exact path="/win/:winId" component={EachWin} />
+          <Route exact path='/' component={LandingPage} />
+          <Route exact path='/login' component={LoginPage} />
+          <Route exact path='/signup' component={SignupPage} />
+          <Route exact path='/reset-password' component={ResetPassword} />
+          <PrivateRoute exact path='/profile' component={ProfilePage} />
+          <PrivateRoute exact path='/profile/edit' component={EditProfile} />
+          <PrivateRoute exact path='/home' component={HomePage} />
+          <PrivateRoute exact path='/create-post' component={CreateWin} />
+          <PrivateRoute exact path='/win/:winId' component={EachWin} />
         </Switch>
       </div>
     </ThemeProvider>
