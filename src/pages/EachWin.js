@@ -18,6 +18,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import CardActions from '@material-ui/core/CardActions';
 import { useParams } from 'react-router-dom';
@@ -26,6 +28,7 @@ import Container from '@material-ui/core/Container';
 import { useSelector, useDispatch } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
+import CardMedia from '@material-ui/core/CardMedia';
 import { useHistory } from 'react-router-dom';
 
 import { SUCCESS, URL, ERROR } from '../utils/constants';
@@ -56,6 +59,26 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 99999,
     color: '#fff',
   },
+  imageCarousel: {
+    position: 'relative',
+  },
+  pre: {
+    position: 'absolute',
+    left: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 99999,
+  },
+  next: {
+    position: 'absolute',
+    right: 0,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 99999,
+  },
+  navigationButtons: {
+    fontSize: '2.5rem',
+  },
 }));
 
 const EachWin = () => {
@@ -69,6 +92,7 @@ const EachWin = () => {
   const [data, setData] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleClickOpenAlert = () => {
     setOpen((open) => !open);
@@ -99,22 +123,35 @@ const EachWin = () => {
     }
     handleCloseAlert();
   };
+
+  const showPreImg = () => {
+    const lastIndex = data?.postImageUrls.length - 1;
+    const shouldResetIndex = currentImageIndex === 0;
+    const index = shouldResetIndex ? lastIndex : currentImageIndex - 1;
+    setCurrentImageIndex(index);
+  };
+  const showNextImg = () => {
+    const lastIndex = data?.postImageUrls.length - 1;
+    const shouldResetIndex = currentImageIndex === lastIndex;
+    const index = shouldResetIndex ? 0 : currentImageIndex + 1;
+    setCurrentImageIndex(index);
+  };
+
   useEffect(() => {
     async function getAWin() {
       try {
         const res = await axios.get(`${URL}/win/${winId}`);
-        console.log(res);
         setData(res.data);
-        console.log(res.data);
       } catch (error) {
         console.log('error finding a single post');
       }
     }
     getAWin();
   }, [winId]);
-  if (data === null || !user) {
+  if (!data || !user) {
     return <WinSkeleton />;
   }
+
   return (
     <Container className={classes.container}>
       <Paper>
@@ -184,6 +221,24 @@ const EachWin = () => {
             title={data.username}
             subheader={moment(data?.createdAt).fromNow()}
           />
+
+          <div className={classes.imageCarousel}>
+            <div className={classes.pre}>
+              <IconButton onClick={showPreImg}>
+                <NavigateBeforeIcon className={classes.navigationButtons} />
+              </IconButton>
+            </div>
+            <CardMedia
+              className={classes.media}
+              image={data?.postImageUrls[currentImageIndex]}
+              title='Paella dish'
+            />
+            <div className={classes.next}>
+              <IconButton onClick={showNextImg}>
+                <NavigateNextIcon className={classes.navigationButtons} />
+              </IconButton>
+            </div>
+          </div>
 
           <CardContent>
             <Typography variant='h6' color='black' component='p'>
