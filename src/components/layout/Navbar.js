@@ -13,18 +13,13 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import { logoutUser } from '../../redux/actions/authActions';
 import Container from '@material-ui/core/Container';
-import Badge from '@material-ui/core/Badge';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Tooltip from '@material-ui/core/Tooltip';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+
 import { getAllWins } from '../../redux/actions/winsActions';
+import Notifications from './Notifications';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,18 +53,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-
-  const toggleDrawer = (open) => (event) => {
-    if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    ) {
-      return;
-    }
-
-    setDrawerOpen(open);
-  };
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,34 +72,6 @@ const Navbar = () => {
   const refetchPosts = async () => {
     await dispatch(getAllWins());
   };
-
-  const list = (anchor) => (
-    <div
-      role='presentation'
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-      className={classes.list}
-    >
-      <List>
-        <ListItem button>
-          <ListItemText primary={'asdfasdf'} />
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem button>
-          <ListItemText primary={'asdfasdf'} />
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem button>
-          <ListItemText primary={'asdfasdf'} />
-        </ListItem>
-      </List>
-      <Divider />
-    </div>
-  );
 
   return (
     <div className={classes.root}>
@@ -141,25 +96,7 @@ const Navbar = () => {
                     <AddIcon />
                   </Button>
                 </Tooltip>
-                <>
-                  <Tooltip title='Notifications' placement='bottom'>
-                    <Button
-                      onClick={toggleDrawer(true)}
-                      className={classes.button}
-                    >
-                      <Badge badgeContent={4} color='secondary'>
-                        <NotificationsIcon color='white' />
-                      </Badge>
-                    </Button>
-                  </Tooltip>
-                  <Drawer
-                    anchor={'right'}
-                    open={drawerOpen}
-                    onClose={toggleDrawer(false)}
-                  >
-                    {list('right')}
-                  </Drawer>
-                </>
+                <Notifications />
 
                 <Button
                   aria-controls='simple-menu'

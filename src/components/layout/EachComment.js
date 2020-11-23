@@ -53,10 +53,8 @@ const EachComment = ({
 
   const handleDeleteComment = async () => {
     setLoading((loading) => !loading);
-    console.log('will delete a comment');
     try {
       await axios.delete(`${URL}/win/${winId}/${commentId}`);
-      console.log('deleted successfully');
       const refetch = await axios.get(`${URL}/win/${winId}`);
       setData(refetch.data);
     } catch (err) {

@@ -71,13 +71,14 @@ const EachWin = () => {
   if (!data || !user) {
     return <WinSkeleton />;
   }
-  console.log(data);
   return (
     <Container className={classes.container}>
       <Paper>
         <Card className={classes.root}>
           <EachWinHeader data={data} user={user} />
-          <Carousel images={data.postImageUrls} />
+          {data.postImageUrls.length > 0 && (
+            <Carousel images={data.postImageUrls} />
+          )}
           <CardContent>
             <Typography variant='h6' color='black' component='p'>
               {data.title}
