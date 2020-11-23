@@ -3,30 +3,23 @@ import axios from 'axios';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
-
 import Typography from '@material-ui/core/Typography';
-
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-
 import { useParams } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Backdrop from '@material-ui/core/Backdrop';
-import { useHistory } from 'react-router-dom';
 
-import { SUCCESS, URL, ERROR } from '../utils/constants';
+import { URL } from '../utils/constants';
 import LikeBtn from '../components/layout/LikeBtn';
 import CommentBtn from '../components/layout/CommentBtn';
 import WinSkeleton from '../components/skeletons/WinSkeleton';
 import CommentField from '../components/layout/CommentField';
 import EachComment from '../components/layout/EachComment';
 import { selectUser } from '../redux/slices/authSlice';
-import { SET_LOADING_FALSE, SET_LOADING_TRUE } from '../redux/slices/winsSlice';
-import { deleteAWin } from '../redux/actions/winsActions';
-import { setSnackbar } from '../redux/slices/snackbarSlice';
 import Carousel from '../components/layout/Carousel';
 import EachWinHeader from '../components/layout/EachWinHeader';
 

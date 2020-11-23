@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     top: '50%',
     transform: 'translateY(-50%)',
-    zIndex: 99999,
   },
   next: {
     position: 'absolute',
@@ -54,7 +53,10 @@ const Carousel = ({ images }) => {
     <div className={classes.imageCarousel}>
       <div className={classes.pre}>
         <IconButton onClick={showPreImg}>
-          <NavigateBeforeIcon className={classes.navigationButtons} />
+          <NavigateBeforeIcon
+            color='secondary'
+            className={classes.navigationButtons}
+          />
         </IconButton>
       </div>
       <CardMedia
@@ -65,7 +67,10 @@ const Carousel = ({ images }) => {
       />
       <div className={classes.next}>
         <IconButton onClick={showNextImg}>
-          <NavigateNextIcon className={classes.navigationButtons} />
+          <NavigateNextIcon
+            color='secondary'
+            className={classes.navigationButtons}
+          />
         </IconButton>
       </div>
     </div>
