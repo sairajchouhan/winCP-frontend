@@ -29,17 +29,14 @@ const useStyles = makeStyles((theme) => ({
   button: {
     color: 'white',
   },
-  drawer: {
-    zIndex: 99,
-  },
 }));
 
 const Notifications = () => {
   const classes = useStyles();
   const user = useSelector(selectUser);
-
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notificationData, setNotificationData] = useState([]);
+
   console.log(notificationData);
   useEffect(() => {
     if (user) {

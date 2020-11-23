@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
   imageCarousel: {
     position: 'relative',
+    zIndex: 1,
   },
   pre: {
     position: 'absolute',
