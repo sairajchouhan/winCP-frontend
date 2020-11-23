@@ -58,7 +58,7 @@ const EachComment = ({
       const refetch = await axios.get(`${URL}/win/${winId}`);
       setData(refetch.data);
     } catch (err) {
-      setSnackbar(dispatch, true, ERROR, 'cannot post the comment');
+      setSnackbar(dispatch, true, ERROR, 'something went wrong');
     }
     setLoading((loading) => !loading);
   };

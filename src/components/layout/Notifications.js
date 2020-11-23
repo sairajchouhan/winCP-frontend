@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as routerLink } from 'react-router-dom';
 import Drawer from '@material-ui/core/Drawer';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
@@ -8,7 +8,13 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import Link from '@material-ui/core/Link';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import Grid from '@material-ui/core/Grid';
+import moment from 'moment';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 
@@ -17,7 +23,7 @@ import { selectUser } from '../../redux/slices/authSlice';
 
 const useStyles = makeStyles((theme) => ({
   list: {
-    width: 250,
+    width: 350,
   },
   button: {
     color: 'white',
@@ -30,13 +36,15 @@ const Notifications = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notificationData, setNotificationData] = useState([]);
-
+  console.log(notificationData);
   useEffect(() => {
     if (user) {
       db.collection('notifications')
+        .orderBy('createdAt', 'desc')
         .where('recipient', '==', user.info.username)
         .onSnapshot(
           (querySnapshot) => {
+            console.log('fetching the notifications');
             const notifications = [];
             querySnapshot.forEach((doc) => {
               notifications.push(doc.data());
@@ -60,7 +68,7 @@ const Notifications = () => {
 
     setDrawerOpen(open);
   };
-  console.log(notificationData.length);
+
   const list = (notificationsArray) => (
     <div
       role='presentation'
@@ -75,16 +83,60 @@ const Notifications = () => {
               <ListItem
                 button
                 onClick={() => toggleDrawer(false)}
-                component={Link}
+                component={routerLink}
                 to={`/win/${noti.winId}`}
+                key={noti?.notificationId}
               >
-                <ListItemText
-                  primary={`${noti.sender} ${
-                    noti.type === 'comment'
-                      ? 'commented'
-                      : noti.type === 'like' && 'liked'
-                  } on your win`}
-                />
+                {noti.type === 'comment' && (
+                  <ListItemIcon>
+                    <Badge color='secondary' variant='dot'>
+                      <ChatBubbleOutlineIcon color='primary' />
+                    </Badge>
+                  </ListItemIcon>
+                )}
+                {noti.type === 'like' && (
+                  <ListItemIcon>
+                    <Badge color='secondary' variant='dot'>
+                      <FavoriteBorderIcon color='secondary' />
+                    </Badge>
+                  </ListItemIcon>
+                )}
+                <Grid container direction='column'>
+                  <Grid item>
+                    {noti.type === 'comment' && (
+                      <Typography variant='body1'>
+                        <Link
+                          href='#'
+                          onClick={() =>
+                            console.log('will take to that user profile')
+                          }
+                        >
+                          @{noti.sender}
+                        </Link>{' '}
+                        commented on your win
+                      </Typography>
+                    )}
+                    {noti.type === 'like' && (
+                      <Typography variant='body1'>
+                        <Link
+                          href='#'
+                          onClick={() =>
+                            console.log('will take to that user profile')
+                          }
+                        >
+                          @{noti.sender}
+                        </Link>{' '}
+                        liked your win
+                      </Typography>
+                    )}
+
+                    <Grid item>
+                      <Typography variant='body2' display='block' gutterBottom>
+                        {moment(noti.createdAt).fromNow()}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
               </ListItem>
             </List>
             <Divider />
@@ -93,11 +145,23 @@ const Notifications = () => {
       })}
     </div>
   );
+
+  const getUnreadNotifications = (notificationData) => {
+    return notificationData
+      .map((noti) => {
+        return noti.read;
+      })
+      .filter((eachRead) => !eachRead).length;
+  };
+
   return (
     <>
       <Tooltip title='Notifications' placement='bottom'>
         <Button onClick={toggleDrawer(true)} className={classes.button}>
-          <Badge badgeContent={notificationData.length} color='secondary'>
+          <Badge
+            badgeContent={getUnreadNotifications(notificationData)}
+            color='secondary'
+          >
             <NotificationsIcon color='white' />
           </Badge>
         </Button>
