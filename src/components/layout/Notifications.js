@@ -1,29 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link as routerLink } from 'react-router-dom';
 import Drawer from '@material-ui/core/Drawer';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import Link from '@material-ui/core/Link';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import moment from 'moment';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Backdrop from '@material-ui/core/Backdrop';
-import Typography from '@material-ui/core/Typography';
+
 import { makeStyles } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
+import Badge from '@material-ui/core/Badge';
 
 import { db } from '../../firebase/config';
 import { selectUser } from '../../redux/slices/authSlice';
 import { SET_NOTIFICATION } from '../../redux/slices/notificationsSlice';
+import EachNotification from './EachNotification';
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -43,7 +32,7 @@ const Notifications = () => {
   const user = useSelector(selectUser);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+
   const notificationData = useSelector(
     (state) => state?.notifications?.notifications
   );
@@ -68,6 +57,7 @@ const Notifications = () => {
           }
         );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!notificationData) {
@@ -93,12 +83,6 @@ const Notifications = () => {
       .filter((eachRead) => !eachRead).length;
   };
 
-  const marknotificationAsRead = (notificationId, winId) => {
-    console.log('I will mark notification as read');
-    console.log(notificationId, winId);
-    setDrawerOpen(false);
-  };
-
   return (
     <>
       <Tooltip title='Notifications' placement='bottom'>
@@ -121,86 +105,13 @@ const Notifications = () => {
           {notificationData?.map((noti) => {
             return (
               <>
-                <Grid container justify='space-between' alignItems='center'>
-                  <Grid xs={10} item>
-                    <ListItem
-                      button
-                      component={routerLink}
-                      to={`/win/${noti.winId}`}
-                      key={noti?.notificationId}
-                    >
-                      {noti.type === 'comment' && (
-                        <ListItemIcon>
-                          <Badge color='secondary' variant='dot'>
-                            <ChatBubbleOutlineIcon color='primary' />
-                          </Badge>
-                        </ListItemIcon>
-                      )}
-                      {noti.type === 'like' && (
-                        <ListItemIcon>
-                          <Badge color='secondary' variant='dot'>
-                            <FavoriteBorderIcon color='secondary' />
-                          </Badge>
-                        </ListItemIcon>
-                      )}
-                      <Grid container direction='column'>
-                        <Grid item>
-                          {noti.type === 'comment' && (
-                            <Typography variant='body1'>
-                              <Link
-                                href='#'
-                                onClick={() =>
-                                  console.log('will take to that user profile')
-                                }
-                              >
-                                @{noti.sender}
-                              </Link>{' '}
-                              commented on your win
-                            </Typography>
-                          )}
-                          {noti.type === 'like' && (
-                            <Typography variant='body1'>
-                              <Link
-                                href='#'
-                                onClick={() =>
-                                  console.log('will take to that user profile')
-                                }
-                              >
-                                @{noti.sender}
-                              </Link>{' '}
-                              liked your win
-                            </Typography>
-                          )}
-                        </Grid>
-                        <Grid item>
-                          <Typography
-                            variant='body2'
-                            display='block'
-                            gutterBottom
-                          >
-                            {moment(noti.createdAt).fromNow()}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                    </ListItem>
-                  </Grid>
-                  <Grid xs={2} item>
-                    <IconButton>
-                      <DeleteIcon color='secondary' fontSize='small' />
-                    </IconButton>
-                  </Grid>
-                </Grid>
+                <EachNotification setDrawerOpen={setDrawerOpen} noti={noti} />
                 <Divider />
               </>
             );
           })}
         </div>
       </Drawer>
-      {loading && (
-        <Backdrop className={classes.backdrop} open={true}>
-          <CircularProgress color='inherit' />
-        </Backdrop>
-      )}
     </>
   );
 };
