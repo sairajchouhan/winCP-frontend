@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getAllWins } from '../redux/actions/winsActions';
-import Win from '../components/wins/Win';
+import Win from '../components/layout/Win';
 import WinSkeleton from '../components/skeletons/WinSkeleton';
 
 const useStyles = makeStyles((theme) => ({

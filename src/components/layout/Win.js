@@ -13,8 +13,8 @@ import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { red } from '@material-ui/core/colors';
 
-import LikeBtn from '../layout/LikeBtn';
-import CommentBtn from '../layout/CommentBtn';
+import LikeBtn from './LikeBtn';
+import CommentBtn from './CommentBtn';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,7 +53,7 @@ const Win = ({
         <CardHeader
           avatar={
             <Avatar
-              aria-label="recipe"
+              aria-label='recipe'
               className={classes.avatar}
               src={profileImgUrl}
             />
@@ -63,9 +63,9 @@ const Win = ({
         />
         <CardContent>
           <Typography
-            variant="h6"
-            color="black"
-            component="p"
+            variant='h6'
+            color='black'
+            component='p'
             className={classes.title}
             onClick={() => {
               history.push(`/win/${winId}`);
@@ -73,7 +73,7 @@ const Win = ({
           >
             {title}
           </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography variant='body2' color='textSecondary' component='p'>
             {body}
           </Typography>
         </CardContent>
