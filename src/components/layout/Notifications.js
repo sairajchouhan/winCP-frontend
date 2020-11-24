@@ -15,12 +15,15 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import moment from 'moment';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { db } from '../../firebase/config';
 import { selectUser } from '../../redux/slices/authSlice';
+import { SET_NOTIFICATION } from '../../redux/slices/notificationsSlice';
 
 const useStyles = makeStyles((theme) => ({
   list: {
@@ -29,13 +32,21 @@ const useStyles = makeStyles((theme) => ({
   button: {
     color: 'white',
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 99999,
+    color: '#fff',
+  },
 }));
 
 const Notifications = () => {
   const classes = useStyles();
   const user = useSelector(selectUser);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [notificationData, setNotificationData] = useState([]);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  const notificationData = useSelector(
+    (state) => state?.notifications?.notifications
+  );
 
   console.log(notificationData);
   useEffect(() => {
@@ -50,14 +61,18 @@ const Notifications = () => {
             querySnapshot.forEach((doc) => {
               notifications.push(doc.data());
             });
-            setNotificationData(notifications);
+            dispatch(SET_NOTIFICATION(notifications));
           },
           (err) => {
             console.log(`Encountered error: ${err}`);
           }
         );
     }
-  }, [user]);
+  }, []);
+
+  if (!notificationData) {
+    return <></>;
+  }
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -70,95 +85,18 @@ const Notifications = () => {
     setDrawerOpen(open);
   };
 
-  const list = (notificationsArray) => (
-    <div role='presentation' className={classes.list}>
-      {notificationsArray.map((noti) => {
-        return (
-          <>
-            <Grid container justify='space-between' alignItems='center'>
-              <Grid
-                md={10}
-                item
-                onClick={toggleDrawer(false)}
-                onKeyDown={toggleDrawer(false)}
-              >
-                <ListItem
-                  button
-                  onClick={() => toggleDrawer(false)}
-                  component={routerLink}
-                  to={`/win/${noti.winId}`}
-                  key={noti?.notificationId}
-                >
-                  {noti.type === 'comment' && (
-                    <ListItemIcon>
-                      <Badge color='secondary' variant='dot'>
-                        <ChatBubbleOutlineIcon color='primary' />
-                      </Badge>
-                    </ListItemIcon>
-                  )}
-                  {noti.type === 'like' && (
-                    <ListItemIcon>
-                      <Badge color='secondary' variant='dot'>
-                        <FavoriteBorderIcon color='secondary' />
-                      </Badge>
-                    </ListItemIcon>
-                  )}
-                  <Grid container direction='column'>
-                    <Grid item>
-                      {noti.type === 'comment' && (
-                        <Typography variant='body1'>
-                          <Link
-                            href='#'
-                            onClick={() =>
-                              console.log('will take to that user profile')
-                            }
-                          >
-                            @{noti.sender}
-                          </Link>{' '}
-                          commented on your win
-                        </Typography>
-                      )}
-                      {noti.type === 'like' && (
-                        <Typography variant='body1'>
-                          <Link
-                            href='#'
-                            onClick={() =>
-                              console.log('will take to that user profile')
-                            }
-                          >
-                            @{noti.sender}
-                          </Link>{' '}
-                          liked your win
-                        </Typography>
-                      )}
-                    </Grid>
-                    <Grid item>
-                      <Typography variant='body2' display='block' gutterBottom>
-                        {moment(noti.createdAt).fromNow()}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-              </Grid>
-              <Grid md={2} item>
-                <IconButton>
-                  <DeleteIcon color='secondary' fontSize='small' />
-                </IconButton>
-              </Grid>
-            </Grid>
-            <Divider />
-          </>
-        );
-      })}
-    </div>
-  );
-
   const getUnreadNotifications = (notificationData) => {
     return notificationData
-      .map((noti) => {
+      ?.map((noti) => {
         return noti.read;
       })
       .filter((eachRead) => !eachRead).length;
+  };
+
+  const marknotificationAsRead = (notificationId, winId) => {
+    console.log('I will mark notification as read');
+    console.log(notificationId, winId);
+    setDrawerOpen(false);
   };
 
   return (
@@ -179,8 +117,90 @@ const Notifications = () => {
         open={drawerOpen}
         onClose={toggleDrawer(false)}
       >
-        {list(notificationData)}
+        <div role='presentation' className={classes.list}>
+          {notificationData?.map((noti) => {
+            return (
+              <>
+                <Grid container justify='space-between' alignItems='center'>
+                  <Grid xs={10} item>
+                    <ListItem
+                      button
+                      component={routerLink}
+                      to={`/win/${noti.winId}`}
+                      key={noti?.notificationId}
+                    >
+                      {noti.type === 'comment' && (
+                        <ListItemIcon>
+                          <Badge color='secondary' variant='dot'>
+                            <ChatBubbleOutlineIcon color='primary' />
+                          </Badge>
+                        </ListItemIcon>
+                      )}
+                      {noti.type === 'like' && (
+                        <ListItemIcon>
+                          <Badge color='secondary' variant='dot'>
+                            <FavoriteBorderIcon color='secondary' />
+                          </Badge>
+                        </ListItemIcon>
+                      )}
+                      <Grid container direction='column'>
+                        <Grid item>
+                          {noti.type === 'comment' && (
+                            <Typography variant='body1'>
+                              <Link
+                                href='#'
+                                onClick={() =>
+                                  console.log('will take to that user profile')
+                                }
+                              >
+                                @{noti.sender}
+                              </Link>{' '}
+                              commented on your win
+                            </Typography>
+                          )}
+                          {noti.type === 'like' && (
+                            <Typography variant='body1'>
+                              <Link
+                                href='#'
+                                onClick={() =>
+                                  console.log('will take to that user profile')
+                                }
+                              >
+                                @{noti.sender}
+                              </Link>{' '}
+                              liked your win
+                            </Typography>
+                          )}
+                        </Grid>
+                        <Grid item>
+                          <Typography
+                            variant='body2'
+                            display='block'
+                            gutterBottom
+                          >
+                            {moment(noti.createdAt).fromNow()}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </ListItem>
+                  </Grid>
+                  <Grid xs={2} item>
+                    <IconButton>
+                      <DeleteIcon color='secondary' fontSize='small' />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+                <Divider />
+              </>
+            );
+          })}
+        </div>
       </Drawer>
+      {loading && (
+        <Backdrop className={classes.backdrop} open={true}>
+          <CircularProgress color='inherit' />
+        </Backdrop>
+      )}
     </>
   );
 };
