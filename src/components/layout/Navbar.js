@@ -96,6 +96,7 @@ const Navbar = () => {
                     <AddIcon />
                   </Button>
                 </Tooltip>
+
                 <Notifications />
 
                 <Button

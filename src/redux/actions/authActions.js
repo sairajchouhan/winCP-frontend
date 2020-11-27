@@ -13,14 +13,12 @@ import {
 } from '../slices/authSlice';
 import setAuthToken from '../../utils/setAuthToken';
 import { SET_WINS_EMPTY } from '../slices/winsSlice';
+import { SET_NOTIFICATION } from '../slices/notificationsSlice';
 
 export const loginUser = (loginFormData) => async (dispatch) => {
   dispatch(SET_LOADING_TRUE());
   try {
-    const res = await axios.post(
-      `${URL}/login`,
-      loginFormData
-    );
+    const res = await axios.post(`${URL}/login`, loginFormData);
     const token = res.data.token;
     if (token) localStorage.setItem('token', token);
     dispatch(LOGIN_SUCCESS(token));
@@ -51,6 +49,7 @@ export const signupUser = (signupFormData) => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
   dispatch(LOGOUT());
   dispatch(SET_WINS_EMPTY());
+  dispatch(SET_NOTIFICATION([]));
 };
 
 export const loadUser = () => async (dispatch) => {

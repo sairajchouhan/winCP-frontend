@@ -37,28 +37,28 @@ const Notifications = () => {
     (state) => state?.notifications?.notifications
   );
 
-  console.log(notificationData);
   useEffect(() => {
     if (user) {
       db.collection('notifications')
         .orderBy('createdAt', 'desc')
         .where('recipient', '==', user.info.username)
         .onSnapshot(
-          (querySnapshot) => {
+          (snap) => {
             console.log('fetching the notifications');
             const notifications = [];
-            querySnapshot.forEach((doc) => {
+            snap.forEach((doc) => {
               notifications.push(doc.data());
             });
-            dispatch(SET_NOTIFICATION(notifications));
+            console.log(notifications);
           },
           (err) => {
             console.log(`Encountered error: ${err}`);
           }
         );
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   if (!notificationData) {
     return <></>;

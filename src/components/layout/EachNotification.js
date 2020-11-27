@@ -36,9 +36,16 @@ const EachNotification = ({ noti, setDrawerOpen }) => {
   const [loading, setLoading] = useState(false);
 
   const markNotificationAsRead = async () => {
-    await axios.post(`${URL}/notifications`, {
-      notificationId: noti.notificationId,
-    });
+    setLoading((loading) => !loading);
+    try {
+      await axios.post(`${URL}/notifications`, {
+        notificationId: noti.notificationId,
+      });
+    } catch (err) {
+      console.log(err.response.data);
+    }
+
+    setLoading((loading) => !loading);
     setDrawerOpen(false);
   };
 
@@ -49,7 +56,7 @@ const EachNotification = ({ noti, setDrawerOpen }) => {
           onClick={markNotificationAsRead}
           button
           component={routerLink}
-          to={`/win/${noti.winId}`}
+          to={!noti.read ? `/win/${noti.winId}` : ''}
           key={noti?.notificationId}
         >
           {noti.type === 'comment' && (
