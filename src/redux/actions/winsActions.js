@@ -74,3 +74,13 @@ export const deleteAWin = async (winId) => {
     return false;
   }
 };
+
+export const getAllWinsOfAUser = async (username) => {
+  try {
+    const res = await axios.get(`${URL}/wins/${username}`);
+    return res.data;
+  } catch (err) {
+    console.log(err.response);
+    return false;
+  }
+};

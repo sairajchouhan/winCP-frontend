@@ -97,7 +97,7 @@ const Navbar = () => {
                   </Button>
                 </Tooltip>
 
-                <Notifications />
+                {/* <Notifications /> */}
 
                 <Button
                   aria-controls='simple-menu'
