@@ -9,6 +9,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from '@material-ui/core/Backdrop';
 import Avatar from '@material-ui/core/Avatar';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
@@ -26,6 +28,7 @@ import { ERROR, SUCCESS } from '../../utils/constants';
 const EachWinHeader = ({ data, user }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -45,6 +48,7 @@ const EachWinHeader = ({ data, user }) => {
   };
 
   const handleDelete = async (winId) => {
+    setLoading((loading) => !loading);
     dispatch(SET_LOADING_TRUE());
     const errorWhileDeleting = await deleteAWin(winId);
     setAnchorEl(null);
@@ -56,66 +60,74 @@ const EachWinHeader = ({ data, user }) => {
       setSnackbar(dispatch, true, ERROR, 'Sonething went wrong');
     }
     handleCloseAlert();
+    setLoading((loading) => !loading);
   };
 
   return (
-    <CardHeader
-      avatar={<Avatar aria-label='recipe' src={data.profileImgUrl} />}
-      action={
-        user?.info?.username === data.username && (
-          <>
-            <IconButton
-              aria-label='settings'
-              aria-controls='simple-menu'
-              aria-haspopup='true'
-              onClick={handleClick}
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id='simple-menu'
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClickOpenAlert}>Delete Win</MenuItem>
-
-              <Dialog
-                open={open}
-                onClose={handleCloseAlert}
-                aria-labelledby='alert-dialog-title'
-                aria-describedby='alert-dialog-description'
+    <>
+      <CardHeader
+        avatar={<Avatar aria-label='recipe' src={data.profileImgUrl} />}
+        action={
+          user?.info?.username === data.username && (
+            <>
+              <IconButton
+                aria-label='settings'
+                aria-controls='simple-menu'
+                aria-haspopup='true'
+                onClick={handleClick}
               >
-                <DialogTitle id='alert-dialog-title'>
-                  {'Are you sure you want to delete this win ?'}
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id='alert-dialog-description'>
-                    All the images, likes and comments realated to the win will
-                    be delted
-                  </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseAlert} color='primary'>
-                    Disagree
-                  </Button>
-                  <Button
-                    onClick={() => handleDelete(data.winId)}
-                    color='secondary'
-                    autoFocus
-                  >
-                    Agree
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </Menu>
-          </>
-        )
-      }
-      title={data.username}
-      subheader={moment(data?.createdAt).fromNow()}
-    />
+                <MoreVertIcon />
+              </IconButton>
+              <Menu
+                id='simple-menu'
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleClickOpenAlert}>Delete Win</MenuItem>
+
+                <Dialog
+                  open={open}
+                  onClose={handleCloseAlert}
+                  aria-labelledby='alert-dialog-title'
+                  aria-describedby='alert-dialog-description'
+                >
+                  <DialogTitle id='alert-dialog-title'>
+                    {'Are you sure you want to delete this win ?'}
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id='alert-dialog-description'>
+                      All the images, likes and comments realated to the win
+                      will be delted
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseAlert} color='primary'>
+                      Disagree
+                    </Button>
+                    <Button
+                      onClick={() => handleDelete(data.winId)}
+                      color='secondary'
+                      autoFocus
+                    >
+                      Agree
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </Menu>
+            </>
+          )
+        }
+        title={data.username}
+        subheader={moment(data?.createdAt).fromNow()}
+      />
+      {loading && (
+        <Backdrop style={{ zIndex: '9999', color: 'white' }} open={true}>
+          <CircularProgress color='inherit' />
+        </Backdrop>
+      )}
+    </>
   );
 };
 

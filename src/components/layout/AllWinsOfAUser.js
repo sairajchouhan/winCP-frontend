@@ -3,12 +3,9 @@ import React, { useEffect, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import moment from 'moment';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Card from '@material-ui/core/Card';
-import Avatar from '@material-ui/core/Avatar';
 import { useHistory } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
@@ -17,6 +14,7 @@ import axios from 'axios';
 
 import { URL } from '../../utils/constants';
 import AllMyWinsSkeleton from '../skeletons/AllMyWinsSkeleton';
+import EachWinHeader from './EachWinHeader';
 
 const useStyles = makeStyles((theme) => ({
   img: {
@@ -42,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AllWinsOfAUser = ({ username }) => {
+const AllWinsOfAUser = ({ user }) => {
   const classes = useStyles();
   const history = useHistory();
   const [wins, setWins] = useState([]);
@@ -50,7 +48,7 @@ const AllWinsOfAUser = ({ username }) => {
   useEffect(() => {
     const getWIns = async () => {
       console.log('running useEffect');
-      const res = await axios.get(`${URL}/wins/${username}`);
+      const res = await axios.get(`${URL}/wins/${user.info.username}`);
       setWins(res.data.wins);
     };
     getWIns();
@@ -70,17 +68,8 @@ const AllWinsOfAUser = ({ username }) => {
             <>
               <Grid xs={12} className={classes.grid}>
                 <Card className={classes.root}>
-                  <CardHeader
-                    avatar={
-                      <Avatar
-                        aria-label='recipe'
-                        className={classes.avatar}
-                        src={win.profileImgUrl}
-                      />
-                    }
-                    title={username}
-                    subheader={moment(win.createdAt).format('MMMM Do YYYY')}
-                  />
+                  <EachWinHeader user={user} data={win} />
+
                   <CardContent>
                     <Typography
                       variant='h6'

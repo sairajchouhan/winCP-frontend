@@ -72,7 +72,7 @@ const ProfilePage = () => {
         <ProfileCard user={user} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <AllWinsOfAUser username={user?.info?.username} />
+        <AllWinsOfAUser user={user} />
       </TabPanel>
     </Container>
   );
