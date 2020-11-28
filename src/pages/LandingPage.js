@@ -9,10 +9,32 @@ import { Container, makeStyles, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: theme.spacing(4),
+    maxWidth: '1400px',
+    margin: '0 auto',
+
+    height: '90vh',
+    display: 'flex',
   },
-  leftContainer: {
-    padding: theme.spacing(4),
+  left: {
+    width: '50%',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  right: {
+    width: '50%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  img: {
+    width: '100%',
+  },
+  subheading: {
+    color: '#2f2f2f',
   },
 }));
 
@@ -24,26 +46,18 @@ const PageLanding = () => {
   }
 
   return (
-    <div>
-      <Grid container className={classes.container}>
-        <Grid
-          item
-          xs={12}
-          md={6}
-          container
-          justify='center'
-          alignItems='center'
-          direction='column'
-        >
-          <div className={classes.leftContainer}>
-            <Typography variant='h1'>Your wins matters</Typography>
-            <Typography variant='h3'>Your wins matters</Typography>
-          </div>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <img style={{ width: '90%' }} src={winSvg} alt='' />
-        </Grid>
-      </Grid>
+    <div className={classes.container}>
+      <div className={classes.left}>
+        <Typography variant='h1' className={classes.heading}>
+          Your wins matters
+        </Typography>
+        <Typography variant='h3' className={classes.subheading}>
+          Let others know your wins and progress together
+        </Typography>
+      </div>
+      <div className={classes.right}>
+        <img src={winSvg} alt='' className={classes.img} />
+      </div>
     </div>
   );
 };
